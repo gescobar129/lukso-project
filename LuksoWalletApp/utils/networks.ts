@@ -9,8 +9,7 @@ let OPTIMISM_RPC_API_KEY = ""
 let POLYGONSCAN_API_KEY = ""
 let POLYGON_RPC_API_KEY = ""
 
-// TODO: NEED TO ADD LUKSO network
-export const consideredNetworks = [1, 137, 10, 100, 42220, 42161, 43114];
+export const consideredNetworks = [1, 137, 10, 100, 2828, 42220, 42161, 43114];
 export const networkData = {
 	1: {
 		name: 'ethereum',
@@ -40,6 +39,13 @@ export const networkData = {
 			'https://api-optimistic.etherscan.io/api?apikey=' +
 			OPTIMISMSCAN_API_KEY +
 			'&',
+	},
+	2828: {
+		name: 'Lukso',
+		// TODO: Add native currency contract
+		nativeCurrencyContract: '',
+		rpc_endpoint: 'https://rpc.l16.lukso.network/',
+		scan_endpoint: 'https://explorer.execution.l16.lukso.network/'
 	},
 	42161: {
 		name: 'arbitrum',
