@@ -1,0 +1,102 @@
+{
+  "_format": "hh-sol-artifact-1",
+  "contractName": "CalculateERCInterfaces",
+  "sourceName": "contracts/Helpers/ERC165Interfaces.sol",
+  "abi": [
+    {
+      "inputs": [],
+      "name": "calculateInterfaceERC1155",
+      "outputs": [
+        {
+          "internalType": "bytes4",
+          "name": "",
+          "type": "bytes4"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "calculateInterfaceERC1271",
+      "outputs": [
+        {
+          "internalType": "bytes4",
+          "name": "",
+          "type": "bytes4"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "calculateInterfaceERC20",
+      "outputs": [
+        {
+          "internalType": "bytes4",
+          "name": "",
+          "type": "bytes4"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "calculateInterfaceERC223",
+      "outputs": [
+        {
+          "internalType": "bytes4",
+          "name": "",
+          "type": "bytes4"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "calculateInterfaceERC721",
+      "outputs": [
+        {
+          "internalType": "bytes4",
+          "name": "",
+          "type": "bytes4"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "calculateInterfaceERC721Metadata",
+      "outputs": [
+        {
+          "internalType": "bytes4",
+          "name": "",
+          "type": "bytes4"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "calculateInterfaceERC777",
+      "outputs": [
+        {
+          "internalType": "bytes4",
+          "name": "",
+          "type": "bytes4"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    }
+  ],
+  "bytecode": "0x608060405234801561001057600080fd5b506101f3806100206000396000f3fe608060405234801561001057600080fd5b506004361061007d5760003560e01c80639570b90c1161005b5780639570b90c14610125578063d0cc5cf21461014b578063d7d6907414610171578063dcf0621f1461019757600080fd5b8063260570e714610082578063815bbbaa146100d9578063894faa68146100ff575b600080fd5b7fd9b67a26000000000000000000000000000000000000000000000000000000005b6040517fffffffff00000000000000000000000000000000000000000000000000000000909116815260200160405180910390f35b7f80ac58cd000000000000000000000000000000000000000000000000000000006100a4565b7f36372b07000000000000000000000000000000000000000000000000000000006100a4565b7f5b5e139f000000000000000000000000000000000000000000000000000000006100a4565b7f87d43052000000000000000000000000000000000000000000000000000000006100a4565b7f1626ba7e000000000000000000000000000000000000000000000000000000006100a4565b7fe58e113c000000000000000000000000000000000000000000000000000000006100a456fea2646970667358221220f8e3d92b9b83428953e0609c9da7021defd870550676653b775677e14499e92064736f6c63430008070033",
+  "deployedBytecode": "0x608060405234801561001057600080fd5b506004361061007d5760003560e01c80639570b90c1161005b5780639570b90c14610125578063d0cc5cf21461014b578063d7d6907414610171578063dcf0621f1461019757600080fd5b8063260570e714610082578063815bbbaa146100d9578063894faa68146100ff575b600080fd5b7fd9b67a26000000000000000000000000000000000000000000000000000000005b6040517fffffffff00000000000000000000000000000000000000000000000000000000909116815260200160405180910390f35b7f80ac58cd000000000000000000000000000000000000000000000000000000006100a4565b7f36372b07000000000000000000000000000000000000000000000000000000006100a4565b7f5b5e139f000000000000000000000000000000000000000000000000000000006100a4565b7f87d43052000000000000000000000000000000000000000000000000000000006100a4565b7f1626ba7e000000000000000000000000000000000000000000000000000000006100a4565b7fe58e113c000000000000000000000000000000000000000000000000000000006100a456fea2646970667358221220f8e3d92b9b83428953e0609c9da7021defd870550676653b775677e14499e92064736f6c63430008070033",
+  "linkReferences": {},
+  "deployedLinkReferences": {}
+}
