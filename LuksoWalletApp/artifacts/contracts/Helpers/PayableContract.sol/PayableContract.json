@@ -1,0 +1,30 @@
+{
+  "_format": "hh-sol-artifact-1",
+  "contractName": "PayableContract",
+  "sourceName": "contracts/Helpers/PayableContract.sol",
+  "abi": [
+    {
+      "inputs": [],
+      "stateMutability": "payable",
+      "type": "constructor"
+    },
+    {
+      "inputs": [],
+      "name": "payableFalse",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "payableTrue",
+      "outputs": [],
+      "stateMutability": "payable",
+      "type": "function"
+    }
+  ],
+  "bytecode": "0x608060405260718060116000396000f3fe60806040526004361060265760003560e01c8063618eea3914602b57806372d2a34c14602d575b600080fd5b005b348015603857600080fd5b5000fea26469706673582212208610807348e6f57948f6ef182ecd34cb6af033b372392d6178e40ca770fdc94664736f6c63430008070033",
+  "deployedBytecode": "0x60806040526004361060265760003560e01c8063618eea3914602b57806372d2a34c14602d575b600080fd5b005b348015603857600080fd5b5000fea26469706673582212208610807348e6f57948f6ef182ecd34cb6af033b372392d6178e40ca770fdc94664736f6c63430008070033",
+  "linkReferences": {},
+  "deployedLinkReferences": {}
+}

@@ -1,0 +1,115 @@
+{
+  "_format": "hh-sol-artifact-1",
+  "contractName": "CalculateLSPInterfaces",
+  "sourceName": "contracts/Helpers/ERC165Interfaces.sol",
+  "abi": [
+    {
+      "inputs": [],
+      "name": "calculateInterfaceClaimOwnership",
+      "outputs": [
+        {
+          "internalType": "bytes4",
+          "name": "",
+          "type": "bytes4"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "calculateInterfaceLSP0",
+      "outputs": [
+        {
+          "internalType": "bytes4",
+          "name": "",
+          "type": "bytes4"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "calculateInterfaceLSP1",
+      "outputs": [
+        {
+          "internalType": "bytes4",
+          "name": "",
+          "type": "bytes4"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "calculateInterfaceLSP1Delegate",
+      "outputs": [
+        {
+          "internalType": "bytes4",
+          "name": "",
+          "type": "bytes4"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "calculateInterfaceLSP6KeyManager",
+      "outputs": [
+        {
+          "internalType": "bytes4",
+          "name": "",
+          "type": "bytes4"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "calculateInterfaceLSP7",
+      "outputs": [
+        {
+          "internalType": "bytes4",
+          "name": "",
+          "type": "bytes4"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "calculateInterfaceLSP8",
+      "outputs": [
+        {
+          "internalType": "bytes4",
+          "name": "",
+          "type": "bytes4"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "calculateInterfaceLSP9",
+      "outputs": [
+        {
+          "internalType": "bytes4",
+          "name": "",
+          "type": "bytes4"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    }
+  ],
+  "bytecode": "0x608060405234801561001057600080fd5b50610224806100206000396000f3fe608060405234801561001057600080fd5b50600436106100885760003560e01c80639f6e342b1161005b5780639f6e342b14610156578063bfdb39261461017c578063e6bcd8d3146101a2578063f06d8fd7146101c857600080fd5b80634bc262c01461008d5780635b0b038d146100e45780635c48b04a1461010a5780636590e40214610130575b600080fd5b7fd225f160000000000000000000000000000000000000000000000000000000005b6040517fffffffff00000000000000000000000000000000000000000000000000000000909116815260200160405180910390f35b7f49399145000000000000000000000000000000000000000000000000000000006100af565b7fe33f65c3000000000000000000000000000000000000000000000000000000006100af565b7f6bb56a14000000000000000000000000000000000000000000000000000000006100af565b7f9a3bfe88000000000000000000000000000000000000000000000000000000006100af565b7fc403d48f000000000000000000000000000000000000000000000000000000006100af565b7fa245bbda000000000000000000000000000000000000000000000000000000006100af565b7f8c1d44f6000000000000000000000000000000000000000000000000000000006100af56fea264697066735822122000a48a6ed8a6542ff386deb0e9bd6bb0bca9f29c1c47ff398eeb75ce8fb720ab64736f6c63430008070033",
+  "deployedBytecode": "0x608060405234801561001057600080fd5b50600436106100885760003560e01c80639f6e342b1161005b5780639f6e342b14610156578063bfdb39261461017c578063e6bcd8d3146101a2578063f06d8fd7146101c857600080fd5b80634bc262c01461008d5780635b0b038d146100e45780635c48b04a1461010a5780636590e40214610130575b600080fd5b7fd225f160000000000000000000000000000000000000000000000000000000005b6040517fffffffff00000000000000000000000000000000000000000000000000000000909116815260200160405180910390f35b7f49399145000000000000000000000000000000000000000000000000000000006100af565b7fe33f65c3000000000000000000000000000000000000000000000000000000006100af565b7f6bb56a14000000000000000000000000000000000000000000000000000000006100af565b7f9a3bfe88000000000000000000000000000000000000000000000000000000006100af565b7fc403d48f000000000000000000000000000000000000000000000000000000006100af565b7fa245bbda000000000000000000000000000000000000000000000000000000006100af565b7f8c1d44f6000000000000000000000000000000000000000000000000000000006100af56fea264697066735822122000a48a6ed8a6542ff386deb0e9bd6bb0bca9f29c1c47ff398eeb75ce8fb720ab64736f6c63430008070033",
+  "linkReferences": {},
+  "deployedLinkReferences": {}
+}

@@ -117,6 +117,7 @@ const getWallet = async (): Promise<walletWithKey | undefined> => {
 	const wallets = await getWallets();
 	return wallets[0];
 };
+
 const sanitize = (s = ''): string => s.toLowerCase().replace(/[^a-z]/g, '');
 export const formatSeedStringToArray = (seed: string): string[] => {
 	return seed
