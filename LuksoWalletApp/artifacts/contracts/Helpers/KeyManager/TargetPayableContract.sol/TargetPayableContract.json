@@ -1,0 +1,37 @@
+{
+  "_format": "hh-sol-artifact-1",
+  "contractName": "TargetPayableContract",
+  "sourceName": "contracts/Helpers/KeyManager/TargetPayableContract.sol",
+  "abi": [
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "newValue",
+          "type": "uint256"
+        }
+      ],
+      "name": "updateState",
+      "outputs": [],
+      "stateMutability": "payable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "value",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ],
+  "bytecode": "0x608060405234801561001057600080fd5b5060b18061001f6000396000f3fe60806040526004361060265760003560e01c80633fa4f24514602b578063cc8a55e2146051575b600080fd5b348015603657600080fd5b50603f60005481565b60405190815260200160405180910390f35b6061605c3660046063565b600055565b005b600060208284031215607457600080fd5b503591905056fea26469706673582212205bfedbfc3ccc9367842c2e3eea218ab5aa48c9cc8afcc5a7c2441fdab62989ad64736f6c63430008070033",
+  "deployedBytecode": "0x60806040526004361060265760003560e01c80633fa4f24514602b578063cc8a55e2146051575b600080fd5b348015603657600080fd5b50603f60005481565b60405190815260200160405180910390f35b6061605c3660046063565b600055565b005b600060208284031215607457600080fd5b503591905056fea26469706673582212205bfedbfc3ccc9367842c2e3eea218ab5aa48c9cc8afcc5a7c2441fdab62989ad64736f6c63430008070033",
+  "linkReferences": {},
+  "deployedLinkReferences": {}
+}

@@ -1,0 +1,10 @@
+{
+  "_format": "hh-sol-artifact-1",
+  "contractName": "TokenHandling",
+  "sourceName": "contracts/LSP1UniversalReceiver/LSP1UniversalReceiverDelegateVault/Handling/TokenHandling.sol",
+  "abi": [],
+  "bytecode": "0x",
+  "deployedBytecode": "0x",
+  "linkReferences": {},
+  "deployedLinkReferences": {}
+}
