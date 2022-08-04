@@ -1,12 +1,13 @@
-import React, { useState } from 'react'
-import { 
-  View, 
-  SafeAreaView, 
-  Text, 
-  TextInput, 
-  StyleSheet, 
+import React, { useEffect, useState } from 'react'
+import {
+  View,
+  SafeAreaView,
+  Text,
+  TextInput,
+  StyleSheet,
   TouchableOpacity
 } from 'react-native';
+import { deployContracts } from './utils/lukso';
 
 const ImportWallet = () => {
   const [recoveryPhrase, setRecoveryPhrase] = useState(null);
@@ -16,14 +17,34 @@ const ImportWallet = () => {
     console.log('Imported secret phrase')
   }
 
+  useEffect(() => {
+    deployContracts()
+    // createAndDeployUniversalProfile({
+    //   controllerAddresses: ["0x45BaBF7c6A484b65b08d4453569351c52433d424"], // our EOA that will be controlling the UP
+    //   lsp3Profile: {
+    //     name: 'My Universal Profile',
+    //     description: 'My Cool Universal Profile',
+    //     tags: ['Public Profile'],
+    //     links: [
+    //       {
+    //         title: 'My Website',
+    //         url: 'https://my-website.com',
+    //       },
+    //     ],
+    //   }
+    // })
+  }, [])
+
+
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.textContainer}>
         <Text style={styles.mainText}>Secret Recovery Phrase</Text>
         <Text style={styles.subText}>Restore an existing wallet with your 12 or 24-word secret recovery phrase</Text>
       </View>
-      
-      <TextInput 
+
+      <TextInput
         style={styles.input}
         onChangeText={(event) => setRecoveryPhrase(event)}
         value={recoveryPhrase}
