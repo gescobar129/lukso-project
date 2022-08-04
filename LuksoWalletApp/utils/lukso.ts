@@ -68,6 +68,9 @@ export const deployVaults = async (owner: string) => {
 		gasPrice: '10000000'
 	})
 
+	console.log('Vault 1 Deployed!')
+	console.log('Deploying Vault 2...')
+
 	const deployTx2 = await vaultContract.deploy({
 		data: LSP9Vault.bytecode,
 		arguments: [owner]
