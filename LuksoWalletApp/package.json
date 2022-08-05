@@ -20,6 +20,7 @@
     "@tradle/react-native-http": "^2.0.1",
     "@types/lodash": "^4.14.182",
     "@types/react-native-event-source": "^1.1.0",
+    "@types/react-native-vector-icons": "^6.4.11",
     "@walletconnect/client": "^1.7.8",
     "assert": "^1.5.0",
     "axios": "^0.27.2",

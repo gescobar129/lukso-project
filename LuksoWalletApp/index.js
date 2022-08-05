@@ -79,7 +79,7 @@ export default function Project() {
 						/>
 					</Tab.Navigator>
 				) : (
-					<Stack.Navigator initialRouteName="ImportWallet">
+					<Stack.Navigator initialRouteName="CreateWallet">
 						<Stack.Screen
 							name="CreateWallet"
 							component={CreateWallet}

@@ -2448,7 +2448,15 @@
   resolved "https://registry.yarnpkg.com/@types/react-native-event-source/-/react-native-event-source-1.1.0.tgz#3db127dc1f98d8ca29b106b820475bfbb10fff0a"
   integrity sha512-F45yAUXq5XqzXSXmToY3gtMKq4EJThhNKWybtnK6dNRkmDb285K8YWwV1XMDcM6BQCtW9RDax3oJQj4nLbSvIg==
 
-"@types/react-native@^0.69.3":
+"@types/react-native-vector-icons@^6.4.11":
+  version "6.4.11"
+  resolved "https://registry.yarnpkg.com/@types/react-native-vector-icons/-/react-native-vector-icons-6.4.11.tgz#8783d4248377aec14e06420397037b96ff242684"
+  integrity sha512-jUy9CsTu1Cl3k6WRE7GnqBRHbuSv55PRVfMEel+fF73HKpF8g5JmTzTVMBDX8NfY3PlfIY5VlxiqWZxdjm38Pg==
+  dependencies:
+    "@types/react" "*"
+    "@types/react-native" "*"
+
+"@types/react-native@*", "@types/react-native@^0.69.3":
   version "0.69.5"
   resolved "https://registry.yarnpkg.com/@types/react-native/-/react-native-0.69.5.tgz#7709fdbff031a5ecf1956705e6c4a07cdfe6867c"
   integrity sha512-mSUCuGUsW2kJlZiu4GmdYVDKZX/52iyC9rm6dxAmflJj1b7kSO/CMSDy5WbcfS8QerxTqbYGTrIwHD0GnXHzbQ==
