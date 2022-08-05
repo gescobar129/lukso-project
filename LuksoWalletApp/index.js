@@ -19,7 +19,7 @@ import Collectibles from './Collectibles';
 import RecentActivity from './RecentActivity';
 import FAIcon from 'react-native-vector-icons/FontAwesome';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { StateProvider } from './store.js';
+import { StateProvider } from './store';
 
 
 const Stack = createNativeStackNavigator();
