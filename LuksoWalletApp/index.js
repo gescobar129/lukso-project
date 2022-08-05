@@ -19,6 +19,7 @@ import Collectibles from './Collectibles';
 import RecentActivity from './RecentActivity';
 import FAIcon from 'react-native-vector-icons/FontAwesome';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { StateProvider } from './store';
 
 
 const Stack = createNativeStackNavigator();
@@ -30,75 +31,77 @@ const isSignedIn = false
 
 export default function Project() {
 	return (
-		<NavigationContainer>
-			{isSignedIn ? (
-				<Tab.Navigator
-					initialRouteName="Dashboard"
-					screenOptions={{
-						tabBarStyle: {
-							borderTopColor: "#191919",
-							backgroundColor: "#191919"
-						},
-						tabBarShowLabel: false,
-						tabBarInactiveTintColor: "grey",
-						tabBarActiveTintColor: '#FFFFFF',
-
-					}}
-				>
-					<Tab.Screen
-						name="Dashboard"
-						component={Dashboard}
-						options={{
-							headerShown: false,
-							tabBarIcon: ({ color }) => (
-								<FAIcon name="dollar" color={color} size={25} />
-							),
-						}}
-					/>
-					<Tab.Screen
-						name="Collectibles"
-						component={Collectibles}
-						options={{
-							title: "Collectibles",
-							tabBarIcon: ({ color }) => (
-								<MaterialCommunityIcon name="view-grid" color={color} size={30} />
-							),
-						}}
-					/>
-					<Tab.Screen
-						name="RecentActivity"
-						component={RecentActivity}
-						options={{
-							title: "Recent Activity",
-							tabBarIcon: ({ color }) => (
-								<FAIcon name="bolt" color={color} size={25} />
-							),
-						}}
-					/>
-				</Tab.Navigator>
-			) : (
-				<Stack.Navigator initialRouteName="ImportWallet">
-					<Stack.Screen
-						name="CreateWallet"
-						component={CreateWallet}
-						options={{
-							title: "Secret Recovery Phrase",
-							headerStyle: {
-								backgroundColor: "#1b1c1c"
-							}
-						}} />
-					<Stack.Screen
-						name="ImportWallet"
-						component={ImportWallet}
-						options={{
-							headerStyle: {
-								backgroundColor: "#1b1c1c",
+		<StateProvider>
+			<NavigationContainer>
+				{isSignedIn ? (
+					<Tab.Navigator
+						initialRouteName="Dashboard"
+						screenOptions={{
+							tabBarStyle: {
+								borderTopColor: "#191919",
+								backgroundColor: "#191919"
 							},
+							tabBarShowLabel: false,
+							tabBarInactiveTintColor: "grey",
+							tabBarActiveTintColor: '#FFFFFF',
+
 						}}
-					/>
-				</Stack.Navigator>
-			)}
-		</NavigationContainer>
+					>
+						<Tab.Screen
+							name="Dashboard"
+							component={Dashboard}
+							options={{
+								headerShown: false,
+								tabBarIcon: ({ color }) => (
+									<FAIcon name="dollar" color={color} size={25} />
+								),
+							}}
+						/>
+						<Tab.Screen
+							name="Collectibles"
+							component={Collectibles}
+							options={{
+								title: "Collectibles",
+								tabBarIcon: ({ color }) => (
+									<MaterialCommunityIcon name="view-grid" color={color} size={30} />
+								),
+							}}
+						/>
+						<Tab.Screen
+							name="RecentActivity"
+							component={RecentActivity}
+							options={{
+								title: "Recent Activity",
+								tabBarIcon: ({ color }) => (
+									<FAIcon name="bolt" color={color} size={25} />
+								),
+							}}
+						/>
+					</Tab.Navigator>
+				) : (
+					<Stack.Navigator initialRouteName="CreateWallet">
+						<Stack.Screen
+							name="CreateWallet"
+							component={CreateWallet}
+							options={{
+								title: "Secret Recovery Phrase",
+								headerStyle: {
+									backgroundColor: "#1b1c1c"
+								}
+							}} />
+						<Stack.Screen
+							name="ImportWallet"
+							component={ImportWallet}
+							options={{
+								headerStyle: {
+									backgroundColor: "#1b1c1c",
+								},
+							}}
+						/>
+					</Stack.Navigator>
+				)}
+			</NavigationContainer>
+		</StateProvider>
 	);
 };
 

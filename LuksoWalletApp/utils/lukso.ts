@@ -3,6 +3,7 @@ import { ethers } from 'ethers'
 import LSP0Profile from '../artifacts/contracts/LSP0ERC725Account/LSP0ERC725Account.sol/LSP0ERC725Account.json'
 import Web3 from 'web3'
 import LSP9Vault from '../artifacts/contracts/LSP9Vault/LSP9Vault.sol/LSP9Vault.json';
+import { Dispatch } from '../store';
 
 let luksoProvider = 'https://rpc.l16.lukso.network'
 let masterKey = '02d67249b78d6ce7bd135c39ba8ac747cb20514c6d838738aac92f79757089a2'
@@ -16,7 +17,7 @@ var web3 = new Web3(new Web3.providers.HttpProvider(luksoProvider));
 web3.eth.defaultCommon = { customChain: { name: 'L16', chainId: 2828, networkId: 0xB0C } };
 web3.eth.accounts.wallet.add(masterKey)
 
-export const deployUniversalProfile = async (owner: string) => {
+export const deployUniversalProfile = async (dispatch: Dispatch, owner: string) => {
 	try {
 
 		console.log('deploying Universal Profile...')
@@ -27,14 +28,14 @@ export const deployUniversalProfile = async (owner: string) => {
 
 		const deployTx = profileContract.deploy({
 			data: LSP0Profile.bytecode,
-			arguments: [masterAddress]
+			arguments: [owner]
 		})
 
 		const createTransaction = await web3.eth.accounts.signTransaction(
 			{
 				from: masterAddress,
 				data: deployTx.encodeABI(),
-				gas: '4967295',
+				gas: '36967295',
 			},
 			masterKey
 		);
@@ -43,6 +44,10 @@ export const deployUniversalProfile = async (owner: string) => {
 			createTransaction.rawTransaction
 		);
 		console.log('Contract deployed at address', createReceipt.contractAddress);
+
+		if (!createReceipt.contractAddress) throw Error()
+
+		dispatch({ type: 'set_profile', profile: { address: createReceipt.contractAddress, profileData: {} } })
 
 		return createReceipt.contractAddress
 
@@ -53,7 +58,7 @@ export const deployUniversalProfile = async (owner: string) => {
 
 }
 
-export const deployVaults = async (owner: string) => {
+export const deployVaults = async (dispatch: Dispatch, owner: string) => {
 	const vaultContract = new web3.eth.Contract(LSP9Vault.abi)
 	vaultContract.defaultAccount = masterAddress
 
@@ -64,24 +69,33 @@ export const deployVaults = async (owner: string) => {
 		arguments: [owner]
 	}).send({
 		from: masterAddress,
-		gas: 4967295,
-		gasPrice: '10000000'
+		gas: 84967295,
+		gasPrice: '36967295'
 	})
 
-	console.log('Vault 1 Deployed!')
-	console.log('Deploying Vault 2...')
+
+	dispatch({
+		type: 'set_nftVault', nftVault: {
+			address: deployTx1.options.address,
+			assets: []
+		}
+	})
 
 	const deployTx2 = await vaultContract.deploy({
 		data: LSP9Vault.bytecode,
 		arguments: [owner]
 	}).send({
 		from: masterAddress,
-		gas: 4967295,
-		gasPrice: '10000000'
+		gas: 84967295,
+		gasPrice: '36967295'
 	})
 
-	console.log('deployTx', deployTx1)
-	console.log('deployTx2', deployTx2)
+	dispatch({
+		type: 'set_assetVault', assetVault: {
+			address: deployTx2.options.address,
+			assets: []
+		}
+	})
 
 	return [deployTx1, deployTx2]
 

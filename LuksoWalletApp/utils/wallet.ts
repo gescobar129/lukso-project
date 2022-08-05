@@ -3,13 +3,13 @@ import { ethers } from 'ethers';
 import * as Bip39 from 'bip39';
 import { hdkey } from 'ethereumjs-wallet';
 import _ from 'lodash';
-import { Dispatch } from 'react';
 import { getAuthData, removeAuthData, upsertAuthData } from './authData';
 import { decrypt, encrypt } from './crypto';
 import { networkData } from './networks';
 import { loadCryptoBalances } from './loadCryptoBalances';
 import { WalletReducer, walletWithKey } from '../types';
 import { AsyncStorage } from 'react-native-async-storage';
+import { Dispatch } from '../store';
 // import { walletConnectLoadState } from 'utils/connectToDapp';
 
 // actions
@@ -19,17 +19,15 @@ let SET_WALLET_SEED_PHRASE = ""
 let ENCRYPTION_KEY_WALLET = "some_key"
 
 //Cant use ethers createRandom due to performance
-export async function getMnemonic() {
+export function getMnemonic() {
 	const entropy = ethers.utils.randomBytes(16);
 	const mnemonic = ethers.utils.entropyToMnemonic(entropy);
+
 	return mnemonic;
 }
 //Cant use ethers fromMnemonic due to performance
 export async function recoverWalletWithMnemonicKey(
-	dispatch: Dispatch<{
-		payload: unknown;
-		type: string;
-	}>,
+	dispatch: Dispatch,
 	mnemonic: string,
 	index?: number,
 ) {
@@ -46,23 +44,23 @@ export async function recoverWalletWithMnemonicKey(
 		const wallet = new ethers.Wallet(
 			childWallet.getPrivateKey().toString('hex'),
 		);
-		dispatch({
-			type: SET_WALLET_ADDRESS,
-			payload: wallet.address,
-		});
-		dispatch({
-			type: SET_WALLET_SEED_PHRASE,
-			payload: encrypt(mnemonic, ENCRYPTION_KEY_WALLET),
-		});
 		const resultWallet = {
 			address: wallet.address,
 			publicKey: wallet.publicKey,
 			privateKey: wallet.privateKey,
-			name: 'default',
 			seed: mnemonic,
 		};
-		await addWallet(resultWallet);
-		loadCryptoBalances(wallet.address, dispatch);
+
+		dispatch({ type: 'set_wallet', wallet: resultWallet })
+
+		// TODO: for now we can just store the data unsecurely in
+		// local storage. In the future, for production release 
+		// we can handle safely storing keys
+		// await addWallet(resultWallet);
+
+		// TODO: Ill come back to this if we have time. 
+		// Loads ERC20 balances using zapper fi api
+		// loadCryptoBalances(wallet.address, dispatch);
 		return {
 			success: true,
 			wallet: resultWallet,
