@@ -25,6 +25,8 @@ import {
 } from 'react-native/Libraries/NewAppScreen';
 
 
+
+
 const Section = ({ children, title }) => {
   const isDarkMode = useColorScheme() === 'dark';
   return (
@@ -59,6 +61,7 @@ const App = () => {
           const backgroundStyle = {
             backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
   };
+
 
           // console.log('Mnemonic', await getMnemonic())
 

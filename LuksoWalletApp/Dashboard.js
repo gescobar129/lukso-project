@@ -1,27 +1,24 @@
-import React from 'react'
-import { 
+import React from 'react';
+import {
   StyleSheet,
-  View, 
-  SafeAreaView, 
-  Text, 
-  TouchableOpacity
+  View,
+  SafeAreaView,
+  Text,
+  TouchableOpacity,
 } from 'react-native';
 
 const Dashboard = () => {
-
   const onDeposit = () => {
-    console.log('execute deposit')
-  }
+    console.log('execute deposit');
+  };
 
   const onSend = () => {
-    console.log('execute send')
-  }
+    console.log('execute send');
+  };
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.headerContainer}>
-        <TouchableOpacity
-          onPress={() => console.log('wallet address copied!')}
-        >
+        <TouchableOpacity onPress={() => console.log('wallet address copied!')}>
           <Text style={styles.walletText}>0xfjatfa432ng5g02nFMD</Text>
         </TouchableOpacity>
       </View>
@@ -31,40 +28,36 @@ const Dashboard = () => {
       </View>
 
       <View style={styles.mainButtons}>
-        <TouchableOpacity
-          onPress={onDeposit}
-          style={styles.buttonStyle}
-        >
-          <Text style={styles.buttonText} >Deposit</Text>
+        <TouchableOpacity onPress={onDeposit} style={styles.buttonStyle}>
+          <Text style={styles.buttonText}>Deposit</Text>
         </TouchableOpacity>
         <TouchableOpacity
           onPress={onSend}
-          style={{...styles.buttonStyle, marginLeft: 15}}
-        >
+          style={{...styles.buttonStyle, marginLeft: 15}}>
           <Text style={styles.buttonText}>Send</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
-  )
-}
+  );
+};
 
-export default Dashboard
+export default Dashboard;
 
 const styles = StyleSheet.create({
   container: {
     display: 'flex',
     flex: 1,
-    backgroundColor: '#1b1c1c'
+    backgroundColor: '#1b1c1c',
   },
   headerContainer: {
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "center"
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center',
   },
   walletText: {
-    color: "#FFFFFF",
+    color: '#FFFFFF',
     fontSize: 18,
-    fontWeight: "bold"
+    fontWeight: 'bold',
   },
   balanceContainer: {
     display: 'flex',
@@ -76,26 +69,26 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     fontWeight: 'bold',
     fontSize: 50,
-    color: '#FFFFFF'
+    color: '#FFFFFF',
   },
   mainButtons: {
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'center',
-    marginHorizontal: 15
+    marginHorizontal: 15,
   },
   buttonStyle: {
     backgroundColor: '#0892d0',
     paddingVertical: 15,
     borderRadius: 25,
-    display: "flex",
+    display: 'flex',
     flex: 1,
-    justifyContent: "space-between",
-    alignItems: "center"
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   buttonText: {
-    color: "#FFFFFF",
+    color: '#FFFFFF',
     fontSize: 16,
-    fontWeight: "bold"
-  }
-})
+    fontWeight: 'bold',
+  },
+});
