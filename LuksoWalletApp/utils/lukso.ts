@@ -90,21 +90,25 @@ export const deployVaults = async (dispatch: Dispatch, owner: string) => {
 
 	console.log('Deploying Vaults....')
 
-	const [deployTx1, deployTx2] = await Promise.all([vaultContract.deploy({
+	const deployTx1 = await vaultContract.deploy({
 		data: LSP9Vault.bytecode,
 		arguments: [owner]
 	}).send({
 		from: masterAddress,
 		gas: 4967295,
 		gasPrice: '36967295'
-	}), vaultContract.deploy({
+	})
+
+	const deployTx2 = await vaultContract.deploy({
 		data: LSP9Vault.bytecode,
 		arguments: [owner]
 	}).send({
 		from: masterAddress,
 		gas: 4967295,
-		gasPrice: '36967295'
-	})])
+		gasPrice: '36969295'
+	})
+
+
 
 
 	dispatch({
