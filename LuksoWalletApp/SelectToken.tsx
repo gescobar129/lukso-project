@@ -35,7 +35,7 @@ const SelectToken = ({navigation}: any) => {
   const renderItem = ({item}: any) => {
     return (
       <TouchableOpacity
-        onPress={() => navigation.navigate('Send')}
+        onPress={() => navigation.navigate('WalletAddress')}
         style={styles.item}
       >
         <View>

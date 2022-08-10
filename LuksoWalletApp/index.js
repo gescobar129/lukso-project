@@ -18,9 +18,10 @@ import Dashboard from './Dashboard';
 import Collectibles from './Collectibles';
 import RecentActivity from './RecentActivity';
 import SelectToken from './SelectToken'
-import Send from './WalletAddress'
+import WalletAddress from './WalletAddress'
 import FAIcon from 'react-native-vector-icons/FontAwesome';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { Wallet } from 'ethers';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -114,8 +115,8 @@ export default function Project() {
 							}}
 						/>
 						<Stack.Screen
-							name="Send"
-							component={Send}
+							name="WalletAddress"
+							component={WalletAddress}
 							options={({navigation}) => {
 								return {
 									title: 'Send',
