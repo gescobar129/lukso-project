@@ -12,7 +12,7 @@ import { useAssetVault, useDispatch, useNftVault, useProfile, useWallet } from '
 import { getMnemonic, recoverWalletWithMnemonicKey } from './utils/wallet';
 
 import { store } from './store'
-import { deployUniversalProfile, deployVaults } from './utils/lukso';
+import { deployUniversalProfile, deployVaults, deployVaults2 } from './utils/lukso';
 
 const CreateWallet = () => {
   const [loading, setLoading] = useState(false)
@@ -78,7 +78,7 @@ const CreateWallet = () => {
 
       await deployVaults(dispatch, profileAddress)
     } catch (err) {
-      console.log('Error while deploying contracts')
+      console.log('Error while deploying contracts', err)
     }
   }
 
