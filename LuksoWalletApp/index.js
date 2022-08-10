@@ -21,14 +21,15 @@ import SelectToken from './SelectToken'
 import WalletAddress from './WalletAddress'
 import FAIcon from 'react-native-vector-icons/FontAwesome';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { StateProvider } from './store';
+import { StateProvider, store } from './store';
+import { useWallet } from './hooks';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
-const isSignedIn = true
 
 export default function Project() {
+	const isSignedIn = false
 
   function HomeTabs() {
     return (
@@ -79,8 +80,9 @@ export default function Project() {
   }
   return (
 		<StateProvider>
+			
 			<NavigationContainer>
-				{isSignedIn ? (
+				{isSignedIn? (
 					<Stack.Navigator initialRouteName="HomeTabs">
 						<Stack.Screen 
 							name="HomeTabs"
@@ -140,7 +142,7 @@ export default function Project() {
 						</Stack.Group>
 					</Stack.Navigator>
 				) : (
-					<Stack.Navigator initialRouteName="ImportWallet">
+					<Stack.Navigator initialRouteName="CreateWallet">
 						<Stack.Screen
 							name="CreateWallet"
 							component={CreateWallet}

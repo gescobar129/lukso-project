@@ -5,7 +5,9 @@ import {
   Text,
   Alert,
   StyleSheet,
-  TouchableOpacity
+  TouchableOpacity,
+  FlatList,
+  ActivityIndicator
 } from 'react-native';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useAssetVault, useDispatch, useNftVault, useProfile, useWallet } from './hooks';
@@ -14,7 +16,7 @@ import { getMnemonic, recoverWalletWithMnemonicKey } from './utils/wallet';
 import { store } from './store'
 import { deployUniversalProfile, deployVaults } from './utils/lukso';
 
-const CreateWallet = () => {
+const CreateWallet = ({navigation}: any) => {
   const [loading, setLoading] = useState(false)
   const [seedPhrase, setSeedPhrase] = useState('')
   const dispatch = useDispatch(store)
@@ -42,8 +44,6 @@ const CreateWallet = () => {
     } finally {
       setLoading(false)
     }
-
-
   }, [])
 
   const savedAlert = () => {
@@ -77,9 +77,24 @@ const CreateWallet = () => {
       if (!profileAddress) throw Error('Universal Profile failed to deploy correctly')
 
       await deployVaults(dispatch, profileAddress)
+
+      if (wallet) {
+        navigation.navigate('Dashboard')
+      }
+      
     } catch (err) {
       console.log('Error while deploying contracts')
+    } finally {
+      setLoading(false)
     }
+  }
+
+  const renderItem = ({ item, index }: any) => {
+    return (
+      <View style={styles.itemContainer}>
+        <Text style={styles.indexText}>{`${index + 1}. `}</Text><Text style={styles.itemText}>{item}</Text>
+      </View>
+    )
   }
 
   return (
@@ -92,9 +107,13 @@ const CreateWallet = () => {
         </Text>
       </View>
 
-      <View style={{ backgroundColor: 'green' }}>
-        <Text>{seedPhrase}</Text>
-      </View>
+        <FlatList 
+          data={seedPhrase.split(' ')}
+          renderItem={renderItem}
+          numColumns={2}
+          style={styles.listContainer}
+          contentContainerStyle={{justifyContent: "center", alignItems: "center"}}
+        />
 
       <TouchableOpacity style={styles.copyView}>
         <MaterialCommunityIcon name="content-copy" size={20} color="#FFFFFF" />
@@ -106,7 +125,12 @@ const CreateWallet = () => {
           onPress={savedAlert}
           style={styles.buttonStyle}
         >
-          <Text style={styles.buttonText}>Ok, I saved it somewhere</Text>
+          {loading ? (
+              <ActivityIndicator size="small" color="#FFFFFF" />
+            ) : (
+              <Text style={styles.buttonText}>Ok, I saved it somewhere</Text>
+            )
+          }
         </TouchableOpacity>
       </View>
     </SafeAreaView>
@@ -142,6 +166,31 @@ const styles = StyleSheet.create({
     textAlign: "center",
     color: "grey",
     letterSpacing: .5
+  },
+  listContainer: {
+    display: "flex",
+    // alignItems: "center",
+    maxHeight: 300, alignSelf: "stretch",
+    // marginTop: 50,
+    marginHorizontal: 18,
+    // flex:1,
+    borderWidth:.5, borderColor: "grey",
+    borderRadius: 10
+  },
+  itemContainer: {
+    margin: 10,
+    flexDirection: "row",
+    width: 100
+  },
+  indexText: {
+    color: "#FFFFFF",
+    fontSize: 20,
+    fontWeight: "bold"
+  },
+  itemText: {
+    color: "#FFFFFF",
+    fontSize: 20,
+    fontWeight: "bold"
   },
   copyView: {
     flexDirection: "row",
