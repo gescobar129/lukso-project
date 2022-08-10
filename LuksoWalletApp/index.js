@@ -21,7 +21,7 @@ import SelectToken from './SelectToken'
 import WalletAddress from './WalletAddress'
 import FAIcon from 'react-native-vector-icons/FontAwesome';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { Wallet } from 'ethers';
+import { StateProvider } from './store';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -30,138 +30,140 @@ const isSignedIn = true
 
 export default function Project() {
 
-	function HomeTabs() {
-		return (
-			<Tab.Navigator
-					initialRouteName="Dashboard"
-					screenOptions={{
-						tabBarStyle: {
-							borderTopColor: "#191919",
-							backgroundColor: "#191919"
-						},
-						tabBarShowLabel: false,
-						tabBarInactiveTintColor: "grey",
-						tabBarActiveTintColor: '#FFFFFF',
-					}}
-				>
-					<Tab.Screen
-						name="Dashboard"
-						component={Dashboard}
-						options={{
-							headerShown: false,
-							tabBarIcon: ({ color }) => (
-								<FAIcon name="dollar" color={color} size={25} />
-							),
-						}}
-					/>
-					<Tab.Screen
-						name="Collectibles"
-						component={Collectibles}
-						options={{
-							title: "Collectibles",
-							tabBarIcon: ({ color }) => (
-								<MaterialCommunityIcon name="view-grid" color={color} size={30} />
-							),
-						}}
-					/>
-					<Tab.Screen
-						name="RecentActivity"
-						component={RecentActivity}
-						options={{
-							title: "Recent Activity",
-							tabBarIcon: ({ color }) => (
-								<FAIcon name="bolt" color={color} size={25} />
-							),
-						}}
-					/>
-				</Tab.Navigator>
-		)
-	}
-	return (
-		<NavigationContainer>
-			{isSignedIn ? (
-				<Stack.Navigator initialRouteName="HomeTabs">
-					<Stack.Screen 
-						name="HomeTabs"
-						component={HomeTabs}
-						options={{
-							headerShown: false,
-						}}
-					/>
-					<Stack.Group 
-						screenOptions={{
-							presentation: "modal"
-						}}>
-						<Stack.Screen
-							name="SelectToken"
-							component={SelectToken}
-							options={({navigation}) => {
-								return {
-									title: 'Select Token',
-									headerTitleStyle: {
-										color: "#FFFFFF"
-									},
-									headerLeft: () => {
-										return (
-											<TouchableOpacity onPress={() => navigation.goBack()}>
-												<MaterialCommunityIcon name="window-close" color={"#FFFFFF"} size={20}/>
-											</TouchableOpacity>
-										)
-									},
-									headerStyle: {
-										backgroundColor: "#262626",
-									},
-								}
+  function HomeTabs() {
+    return (
+      <Tab.Navigator
+          initialRouteName="Dashboard"
+          screenOptions={{
+            tabBarStyle: {
+              borderTopColor: "#191919",
+              backgroundColor: "#191919"
+            },
+            tabBarShowLabel: false,
+            tabBarInactiveTintColor: "grey",
+            tabBarActiveTintColor: '#FFFFFF',
+          }}
+        >
+          <Tab.Screen
+            name="Dashboard"
+            component={Dashboard}
+            options={{
+              headerShown: false,
+              tabBarIcon: ({ color }) => (
+                <FAIcon name="dollar" color={color} size={25} />
+              ),
+            }}
+          />
+          <Tab.Screen
+            name="Collectibles"
+            component={Collectibles}
+            options={{
+              title: "Collectibles",
+              tabBarIcon: ({ color }) => (
+                <MaterialCommunityIcon name="view-grid" color={color} size={30} />
+              ),
+            }}
+          />
+          <Tab.Screen
+            name="RecentActivity"
+            component={RecentActivity}
+            options={{
+              title: "Recent Activity",
+              tabBarIcon: ({ color }) => (
+                <FAIcon name="bolt" color={color} size={25} />
+              ),
+            }}
+          />
+        </Tab.Navigator>
+    )
+  }
+  return (
+		<StateProvider>
+			<NavigationContainer>
+				{isSignedIn ? (
+					<Stack.Navigator initialRouteName="HomeTabs">
+						<Stack.Screen 
+							name="HomeTabs"
+							component={HomeTabs}
+							options={{
+								headerShown: false,
 							}}
 						/>
-						<Stack.Screen
-							name="WalletAddress"
-							component={WalletAddress}
-							options={({navigation}) => {
-								return {
-									title: 'Send',
-									headerTitleStyle: {
-										color: "#FFFFFF"
-									},
-									headerLeft: () => {
-										return (
-											<TouchableOpacity onPress={() => navigation.goBack()}>
-												<MaterialCommunityIcon name="keyboard-backspace" color={"#FFFFFF"} size={20}/>
-											</TouchableOpacity>
-										)
-									},
-									headerStyle: {
-										backgroundColor: "#262626",
-									},
+						<Stack.Group 
+							screenOptions={{
+								presentation: "modal"
+							}}>
+							<Stack.Screen
+								name="SelectToken"
+								component={SelectToken}
+								options={({navigation}) => {
+									return {
+										title: 'Select Token',
+										headerTitleStyle: {
+											color: "#FFFFFF"
+										},
+										headerLeft: () => {
+											return (
+												<TouchableOpacity onPress={() => navigation.goBack()}>
+													<MaterialCommunityIcon name="window-close" color={"#FFFFFF"} size={20}/>
+												</TouchableOpacity>
+											)
+										},
+										headerStyle: {
+											backgroundColor: "#262626",
+										},
+									}
 								}}
-							}
+							/>
+							<Stack.Screen
+								name="WalletAddress"
+								component={WalletAddress}
+								options={({navigation}) => {
+									return {
+										title: 'Send',
+										headerTitleStyle: {
+											color: "#FFFFFF"
+										},
+										headerLeft: () => {
+											return (
+												<TouchableOpacity onPress={() => navigation.goBack()}>
+													<MaterialCommunityIcon name="keyboard-backspace" color={"#FFFFFF"} size={20}/>
+												</TouchableOpacity>
+											)
+										},
+										headerStyle: {
+											backgroundColor: "#262626",
+										},
+									}}
+								}
+							/>
+						</Stack.Group>
+					</Stack.Navigator>
+				) : (
+					<Stack.Navigator initialRouteName="ImportWallet">
+						<Stack.Screen
+							name="CreateWallet"
+							component={CreateWallet}
+							options={{
+								title: "Secret Recovery Phrase",
+								headerStyle: {
+									backgroundColor: "#1b1c1c"
+								}
+							}} />
+						<Stack.Screen
+							name="ImportWallet"
+							component={ImportWallet}
+							options={{
+								headerStyle: {
+									backgroundColor: "#1b1c1c",
+								},
+							}}
 						/>
-					</Stack.Group>
-				</Stack.Navigator>
-			) : (
-				<Stack.Navigator initialRouteName="ImportWallet">
-					<Stack.Screen
-						name="CreateWallet"
-						component={CreateWallet}
-						options={{
-							title: "Secret Recovery Phrase",
-							headerStyle: {
-								backgroundColor: "#1b1c1c"
-							}
-						}} />
-					<Stack.Screen
-						name="ImportWallet"
-						component={ImportWallet}
-						options={{
-							headerStyle: {
-								backgroundColor: "#1b1c1c",
-							},
-						}}
-					/>
-				</Stack.Navigator>
-			)}
-		</NavigationContainer>
-	);
+					</Stack.Navigator>
+				)}
+			</NavigationContainer>
+		</StateProvider>
+  );
 };
 
 AppRegistry.registerComponent(appName, () => Project)
