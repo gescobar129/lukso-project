@@ -7,15 +7,13 @@ import {
   TouchableOpacity
 } from 'react-native';
 
-const Dashboard = () => {
+
+const Dashboard = ({ navigation }) => {
 
   const onDeposit = () => {
     console.log('execute deposit')
   }
 
-  const onSend = () => {
-    console.log('execute send')
-  }
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.headerContainer}>
@@ -38,7 +36,7 @@ const Dashboard = () => {
           <Text style={styles.buttonText} >Deposit</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          onPress={onSend}
+          onPress={() => navigation.navigate('SelectToken')}
           style={{...styles.buttonStyle, marginLeft: 15}}
         >
           <Text style={styles.buttonText}>Send</Text>
