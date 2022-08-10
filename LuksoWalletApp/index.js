@@ -5,7 +5,7 @@ import './shim.js'
 import crypto from 'crypto'
 import * as encoding from 'text-encoding';
 
-import { AppRegistry } from 'react-native';
+import { AppRegistry, TouchableOpacity } from 'react-native';
 // import App from './App';
 import { name as appName } from './app.json';
 import * as React from 'react';
@@ -17,20 +17,21 @@ import ImportWallet from './ImportWallet';
 import Dashboard from './Dashboard';
 import Collectibles from './Collectibles';
 import RecentActivity from './RecentActivity';
+import SelectToken from './SelectToken'
+import Send from './WalletAddress'
 import FAIcon from 'react-native-vector-icons/FontAwesome';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
-const isSignedIn = false
+const isSignedIn = true
 
 export default function Project() {
-	return (
-		<NavigationContainer>
-			{isSignedIn ? (
-				<Tab.Navigator
+
+	function HomeTabs() {
+		return (
+			<Tab.Navigator
 					initialRouteName="Dashboard"
 					screenOptions={{
 						tabBarStyle: {
@@ -40,7 +41,6 @@ export default function Project() {
 						tabBarShowLabel: false,
 						tabBarInactiveTintColor: "grey",
 						tabBarActiveTintColor: '#FFFFFF',
-
 					}}
 				>
 					<Tab.Screen
@@ -74,6 +74,69 @@ export default function Project() {
 						}}
 					/>
 				</Tab.Navigator>
+		)
+	}
+	return (
+		<NavigationContainer>
+			{isSignedIn ? (
+				<Stack.Navigator initialRouteName="HomeTabs">
+					<Stack.Screen 
+						name="HomeTabs"
+						component={HomeTabs}
+						options={{
+							headerShown: false,
+						}}
+					/>
+					<Stack.Group 
+						screenOptions={{
+							presentation: "modal"
+						}}>
+						<Stack.Screen
+							name="SelectToken"
+							component={SelectToken}
+							options={({navigation}) => {
+								return {
+									title: 'Select Token',
+									headerTitleStyle: {
+										color: "#FFFFFF"
+									},
+									headerLeft: () => {
+										return (
+											<TouchableOpacity onPress={() => navigation.goBack()}>
+												<MaterialCommunityIcon name="window-close" color={"#FFFFFF"} size={20}/>
+											</TouchableOpacity>
+										)
+									},
+									headerStyle: {
+										backgroundColor: "#262626",
+									},
+								}
+							}}
+						/>
+						<Stack.Screen
+							name="Send"
+							component={Send}
+							options={({navigation}) => {
+								return {
+									title: 'Send',
+									headerTitleStyle: {
+										color: "#FFFFFF"
+									},
+									headerLeft: () => {
+										return (
+											<TouchableOpacity onPress={() => navigation.goBack()}>
+												<MaterialCommunityIcon name="keyboard-backspace" color={"#FFFFFF"} size={20}/>
+											</TouchableOpacity>
+										)
+									},
+									headerStyle: {
+										backgroundColor: "#262626",
+									},
+								}}
+							}
+						/>
+					</Stack.Group>
+				</Stack.Navigator>
 			) : (
 				<Stack.Navigator initialRouteName="ImportWallet">
 					<Stack.Screen
@@ -101,4 +164,3 @@ export default function Project() {
 };
 
 AppRegistry.registerComponent(appName, () => Project)
-
