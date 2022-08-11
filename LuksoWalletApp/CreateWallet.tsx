@@ -5,16 +5,24 @@ import {
   Text,
   Alert,
   StyleSheet,
-  TouchableOpacity
+  TouchableOpacity,
+  FlatList,
+  ActivityIndicator
 } from 'react-native';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { useAssetVault, useDispatch, useNftVault, useProfile, useWallet } from './hooks';
+import { 
+  useAssetVault, 
+  useDispatch, 
+  useNftVault, 
+  useProfile, 
+  useWallet 
+} from './hooks';
 import { getMnemonic, recoverWalletWithMnemonicKey } from './utils/wallet';
 
 import { store } from './store'
-import { deployUniversalProfile, deployVaults } from './utils/lukso';
+import { deployUniversalProfile, deployVaults, deployVaults2 } from './utils/lukso';
 
-const CreateWallet = () => {
+const CreateWallet = ({ navigation }: any) => {
   const [loading, setLoading] = useState(false)
   const [seedPhrase, setSeedPhrase] = useState('')
   const dispatch = useDispatch(store)
@@ -22,8 +30,6 @@ const CreateWallet = () => {
   const profile = useProfile(store)
   const nftVault = useNftVault(store)
   const assetVault = useAssetVault(store)
-
-
 
   console.log('wallet', wallet)
   console.log('profile', profile)
@@ -42,8 +48,6 @@ const CreateWallet = () => {
     } finally {
       setLoading(false)
     }
-
-
   }, [])
 
   const savedAlert = () => {
@@ -63,10 +67,6 @@ const CreateWallet = () => {
   }
 
   const onSavedRecoveryPhrase = async () => {
-    // Deploy Contracts here
-
-    // TODO: @gaida add loading indicator to the view while
-    // contracts are deployed
     setLoading(true)
 
     if (!wallet) return console.log('No wallet found!') // Do something? show alert?
@@ -76,10 +76,26 @@ const CreateWallet = () => {
 
       if (!profileAddress) throw Error('Universal Profile failed to deploy correctly')
 
+      console.log('profile address', profileAddress)
+      
       await deployVaults(dispatch, profileAddress)
+
+      if (wallet) {
+        navigation.navigate('Dashboard')
+      }
     } catch (err) {
       console.log('Error while deploying contracts')
+    } finally {
+      setLoading(false)
     }
+  }
+
+  const renderItem = ({ item, index }: any) => {
+    return (
+      <View style={styles.itemContainer}>
+        <Text style={styles.indexText}>{`${index + 1}.   `}</Text><Text style={styles.itemText}>{item}</Text>
+      </View>
+    )
   }
 
   return (
@@ -92,9 +108,13 @@ const CreateWallet = () => {
         </Text>
       </View>
 
-      <View style={{ backgroundColor: 'green' }}>
-        <Text>{seedPhrase}</Text>
-      </View>
+      <FlatList
+        data={seedPhrase.split(' ')}
+        renderItem={renderItem}
+        numColumns={2}
+        style={styles.listContainer}
+        contentContainerStyle={{ justifyContent: "center", alignItems: "center" }}
+      />
 
       <TouchableOpacity style={styles.copyView}>
         <MaterialCommunityIcon name="content-copy" size={20} color="#FFFFFF" />
@@ -106,7 +126,12 @@ const CreateWallet = () => {
           onPress={savedAlert}
           style={styles.buttonStyle}
         >
-          <Text style={styles.buttonText}>Ok, I saved it somewhere</Text>
+          {loading ? (
+            <ActivityIndicator size="small" color="#FFFFFF" />
+            ) : (
+              <Text style={styles.buttonText}>Ok, I saved it somewhere</Text>
+            )
+          }
         </TouchableOpacity>
       </View>
     </SafeAreaView>
@@ -136,12 +161,39 @@ const styles = StyleSheet.create({
     fontWeight: "bold"
   },
   subText: {
-    color: "#FFFFFF",
     fontSize: 16,
-    marginBottom: 18,
     textAlign: "center",
     color: "grey",
     letterSpacing: .5
+  },
+  listContainer: {
+    maxHeight: 320, 
+    alignSelf: "stretch",
+    marginHorizontal: 18,
+  },
+  itemContainer: {
+    marginHorizontal: 10,
+    marginVertical: 6,
+    flexDirection: "row",
+    width: 160,
+    backgroundColor: "#191919",
+    paddingVertical: 10,
+    paddingLeft: 25,
+    justifyContent: "flex-start",
+    borderRadius: 10,
+    borderColor: "grey",
+    borderWidth: .2,
+    alignSelf: "stretch"
+  },
+  indexText: {
+    color: "#FFFFFF",
+    fontSize: 16,
+    fontWeight: "bold"
+  },
+  itemText: {
+    color: "#FFFFFF",
+    fontSize: 16,
+    fontWeight: "bold"
   },
   copyView: {
     flexDirection: "row",
@@ -156,7 +208,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'center',
-    marginHorizontal: 15,
+    marginHorizontal: 18,
     marginBottom: 20
   },
   buttonStyle: {

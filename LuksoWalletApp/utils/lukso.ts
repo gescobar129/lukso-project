@@ -25,11 +25,14 @@ export const deployUniversalProfile = async (dispatch: Dispatch, owner: string) 
 		const profileContract = new web3.eth.Contract(LSP0Profile.abi)
 		profileContract.defaultAccount = masterAddress
 
+		console.log('profilecontract', profileContract)
 
 		const deployTx = profileContract.deploy({
 			data: LSP0Profile.bytecode,
 			arguments: [owner]
 		})
+
+		console.log('deploy tx', deployTx)
 
 		const createTransaction = await web3.eth.accounts.signTransaction(
 			{
@@ -39,6 +42,8 @@ export const deployUniversalProfile = async (dispatch: Dispatch, owner: string) 
 			},
 			masterKey
 		);
+
+		console.log('signed transaction', createTransaction)
 
 		const createReceipt = await web3.eth.sendSignedTransaction(
 			createTransaction.rawTransaction
@@ -58,6 +63,27 @@ export const deployUniversalProfile = async (dispatch: Dispatch, owner: string) 
 
 }
 
+// TODO: To improve speed we can deploy using create2
+// this is a stretch goal
+export const deployVaults2 = async (dispatch: Dispatch, owner: string) => {
+	try {
+		const profileContract = new web3.eth.Contract(LSP0Profile.abi, owner)
+		profileContract.defaultAccount = masterAddress
+
+		console.log('deploying Vaults2.....')
+
+		let reciept = await profileContract.methods.execute(2, owner, 0, LSP9Vault.bytecode).send({
+			from: masterAddress,
+			gas: 4967295,
+			gasPrice: '36967295'
+		})
+
+		console.log('reciept:', reciept)
+	} catch (err) {
+		console.log('Err', err)
+	}
+}
+
 export const deployVaults = async (dispatch: Dispatch, owner: string) => {
 	const vaultContract = new web3.eth.Contract(LSP9Vault.abi)
 	vaultContract.defaultAccount = masterAddress
@@ -69,9 +95,20 @@ export const deployVaults = async (dispatch: Dispatch, owner: string) => {
 		arguments: [owner]
 	}).send({
 		from: masterAddress,
-		gas: 84967295,
+		gas: 4967295,
 		gasPrice: '36967295'
 	})
+
+	const deployTx2 = await vaultContract.deploy({
+		data: LSP9Vault.bytecode,
+		arguments: [owner]
+	}).send({
+		from: masterAddress,
+		gas: 4967295,
+		gasPrice: '36969295'
+	})
+
+
 
 
 	dispatch({
@@ -81,14 +118,6 @@ export const deployVaults = async (dispatch: Dispatch, owner: string) => {
 		}
 	})
 
-	const deployTx2 = await vaultContract.deploy({
-		data: LSP9Vault.bytecode,
-		arguments: [owner]
-	}).send({
-		from: masterAddress,
-		gas: 84967295,
-		gasPrice: '36967295'
-	})
 
 	dispatch({
 		type: 'set_assetVault', assetVault: {

@@ -6,12 +6,20 @@ import {
   Text, 
   TouchableOpacity
 } from 'react-native';
+import { useWallet } from './hooks';
+import { store } from './store';
 
 
-const Dashboard = ({ navigation }) => {
-
+const Dashboard = ({ navigation }: any) => {
   const onDeposit = () => {
     console.log('execute deposit')
+  }
+
+  const shortenWalletAddress = (address: string) => {
+    const firstFour = address.slice(0,6)
+    const lastFour = address.slice(-5)
+    const shortenedAddress = `${firstFour}...${lastFour}`
+    return shortenedAddress
   }
 
   return (
@@ -20,7 +28,7 @@ const Dashboard = ({ navigation }) => {
         <TouchableOpacity
           onPress={() => console.log('wallet address copied!')}
         >
-          <Text style={styles.walletText}>0xfjatfa432ng5g02nFMD</Text>
+          <Text style={styles.walletText}>{shortenWalletAddress(useWallet(store).address)}</Text>
         </TouchableOpacity>
       </View>
 

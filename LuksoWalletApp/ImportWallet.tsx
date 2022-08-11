@@ -5,43 +5,54 @@ import {
   Text,
   TextInput,
   StyleSheet,
-  TouchableOpacity
+  TouchableOpacity,
+  ActivityIndicator
 } from 'react-native';
-import { deployContracts } from './utils/lukso';
+import { 
+  useDispatch,
+  useWallet
+} from './hooks';
+import { recoverWalletWithMnemonicKey } from './utils/wallet';
+import { deployUniversalProfile, deployVaults } from './utils/lukso';
 
-const ImportWallet = () => {
-  const [recoveryPhrase, setRecoveryPhrase] = useState(null);
+import { store } from './store'
 
-  const onRecoveryPhraseSubmit = () => {
-    console.log('recovery phrase', recoveryPhrase)
-    console.log('Imported secret phrase')
+const ImportWallet = ({navigation}: any) => {
+  const [recoveryPhrase, setRecoveryPhrase] = useState(" ")
+  const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch(store);
+  const wallet = useWallet(store);
+
+
+  const onRecoveryPhraseSubmit = async () => {
+    setLoading(true)
+
+    try {
+      recoverWalletWithMnemonicKey(dispatch, recoveryPhrase)
+    
+      const profileAddress = await deployUniversalProfile(dispatch, wallet?.address)
+
+      if (!profileAddress) throw Error('Universal Profile failed to deploy correctly')
+
+      console.log('profile address', profileAddress)
+
+      await deployVaults(dispatch, profileAddress)
+
+      if (profileAddress) {
+        navigation.navigate('Dashboard')
+      }
+    } catch (error) {
+      console.log('error', error)
+    } finally {
+      setLoading(false)
+    }
   }
-
-  useEffect(() => {
-    deployContracts()
-    // createAndDeployUniversalProfile({
-    //   controllerAddresses: ["0x45BaBF7c6A484b65b08d4453569351c52433d424"], // our EOA that will be controlling the UP
-    //   lsp3Profile: {
-    //     name: 'My Universal Profile',
-    //     description: 'My Cool Universal Profile',
-    //     tags: ['Public Profile'],
-    //     links: [
-    //       {
-    //         title: 'My Website',
-    //         url: 'https://my-website.com',
-    //       },
-    //     ],
-    //   }
-    // })
-  }, [])
-
-
 
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.textContainer}>
         <Text style={styles.mainText}>Secret Recovery Phrase</Text>
-        <Text style={styles.subText}>Restore an existing wallet with your 12 or 24-word secret recovery phrase</Text>
+        <Text style={styles.subText}>Restore an existing wallet with your 12 word secret recovery phrase</Text>
       </View>
 
       <TextInput
@@ -55,10 +66,14 @@ const ImportWallet = () => {
 
       <View style={styles.mainButtonView}>
         <TouchableOpacity
-          onPress={onRecoveryPhraseSubmit}
+          onPress={() => onRecoveryPhraseSubmit()}
           style={styles.buttonStyle}
         >
-          <Text style={styles.buttonText}>Import Secret Recovery Phrase</Text>
+          {loading ? (
+            <ActivityIndicator size="small" color="#FFFFFF" />
+          ) : (
+            <Text style={styles.buttonText}>Import Secret Recovery Phrase</Text>
+          )}
         </TouchableOpacity>
       </View>
     </SafeAreaView>
@@ -87,7 +102,6 @@ const styles = StyleSheet.create({
     fontWeight: "bold"
   },
   subText: {
-    color: "#FFFFFF",
     fontSize: 16,
     marginBottom: 18,
     textAlign: "center",
