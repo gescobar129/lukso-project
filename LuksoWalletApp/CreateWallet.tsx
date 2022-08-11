@@ -10,45 +10,37 @@ import {
   ActivityIndicator
 } from 'react-native';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { 
-  useAssetVault, 
-  useDispatch, 
-  useNftVault, 
-  useProfile, 
-  useWallet 
-} from './hooks';
+import { useAppInitialized, useAssetVault, useDispatch, useNftVault, useProfile, useWallet } from './hooks';
+
 import { getMnemonic, recoverWalletWithMnemonicKey } from './utils/wallet';
 
 import { store } from './store'
-import { deployUniversalProfile, deployVaults, deployVaults2 } from './utils/lukso';
+import { deployUniversalProfile, deployVaults, deployVaults2, setupURD } from './utils/lukso';
 
 const CreateWallet = ({ navigation }: any) => {
   const [loading, setLoading] = useState(false)
   const [seedPhrase, setSeedPhrase] = useState('')
   const dispatch = useDispatch(store)
   const wallet = useWallet(store)
-  const profile = useProfile(store)
-  const nftVault = useNftVault(store)
-  const assetVault = useAssetVault(store)
-
-  console.log('wallet', wallet)
-  console.log('profile', profile)
-  console.log('assetVault', assetVault)
-  console.log('nftVault', nftVault)
+  const appInitialized = useAppInitialized(store)
 
   useEffect(() => {
     try {
-      setLoading(true)
-      const mnemonic = getMnemonic()
-      setSeedPhrase(mnemonic)
+      if (!wallet && appInitialized) {
+        setLoading(true)
+        const mnemonic = getMnemonic()
+        setSeedPhrase(mnemonic)
 
-      recoverWalletWithMnemonicKey(dispatch, mnemonic)
+        recoverWalletWithMnemonicKey(dispatch, mnemonic)
+        console.log('wallet created')
+      }
     } catch (error) {
       console.log('Error creating wallet', error)
     } finally {
       setLoading(false)
     }
-  }, [])
+  }, [appInitialized])
+
 
   const savedAlert = () => {
     Alert.alert(
@@ -77,14 +69,18 @@ const CreateWallet = ({ navigation }: any) => {
       if (!profileAddress) throw Error('Universal Profile failed to deploy correctly')
 
       console.log('profile address', profileAddress)
-      
-      await deployVaults(dispatch, profileAddress)
+      const txs = await deployVaults(dispatch, profileAddress)
 
-      if (wallet) {
+
+      // if (txs && txs.length) {
+      //   console.log('deploying URDS....')
+      //   await Promise.all([setupURD(wallet.address, txs[0], profileAddress), setupURD(wallet.address, txs[1], profileAddress)])
+      // }
+      if (wallet && profileAddress && txs) {
         navigation.navigate('Dashboard')
       }
     } catch (err) {
-      console.log('Error while deploying contracts')
+      console.log('Error while deploying contracts', err)
     } finally {
       setLoading(false)
     }
@@ -128,9 +124,9 @@ const CreateWallet = ({ navigation }: any) => {
         >
           {loading ? (
             <ActivityIndicator size="small" color="#FFFFFF" />
-            ) : (
-              <Text style={styles.buttonText}>Ok, I saved it somewhere</Text>
-            )
+          ) : (
+            <Text style={styles.buttonText}>Ok, I saved it somewhere</Text>
+          )
           }
         </TouchableOpacity>
       </View>
@@ -167,7 +163,7 @@ const styles = StyleSheet.create({
     letterSpacing: .5
   },
   listContainer: {
-    maxHeight: 320, 
+    maxHeight: 320,
     alignSelf: "stretch",
     marginHorizontal: 18,
   },

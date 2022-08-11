@@ -8,7 +8,7 @@ import * as encoding from 'text-encoding';
 import { AppRegistry, TouchableOpacity } from 'react-native';
 // import App from './App';
 import { name as appName } from './app.json';
-import * as React from 'react';
+import React, { useEffect, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -21,14 +21,45 @@ import SelectToken from './SelectToken'
 import WalletAddress from './WalletAddress'
 import FAIcon from 'react-native-vector-icons/FontAwesome';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { store } from './store';
-import { useProfile } from './hooks';
+import AsyncStorage from '@react-native-community/async-storage';
+
+import { initialState, store } from './store';
+import { useAppInitialized, useAppState, useAssetVault, useBalance, useDispatch, useNftVault, useProfile, useTransactions, useWallet } from './hooks';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
 
 export default function App() {
+  const dispatch = useDispatch(store)
+  const appstate = useAppState(store)
+  const profile = useProfile(store)
+  const nftVault = useNftVault(store)
+  const assetVault = useAssetVault(store)
+
+
+
+  useEffect(() => {
+    AsyncStorage.getItem('APP_STATE').then((appstate) => {
+      if (appstate) {
+        dispatch({
+          type: 'set_appstate',
+          appstate: { ...JSON.parse(appstate), appInitialized: true }
+        })
+      } else {
+        dispatch({
+          type: 'set_appinitialized',
+          appInitialized: true
+        })
+      }
+    })
+  }, [])
+
+  useEffect(() => {
+    if (JSON.stringify(appstate) !== JSON.stringify(initialState)) {
+      AsyncStorage.setItem('APP_STATE', JSON.stringify({ ...appstate }))
+    }
+  }, [appstate])
 
   function HomeTabs() {
     return (
@@ -80,7 +111,7 @@ export default function App() {
   return (
 
     <NavigationContainer>
-      {useProfile(store) ? (
+      {profile && assetVault && nftVault ? (
         <Stack.Navigator initialRouteName="HomeTabs">
           <Stack.Screen
             name="HomeTabs"

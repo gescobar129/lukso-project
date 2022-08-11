@@ -1,22 +1,51 @@
-import React from 'react'
-import { 
+import React, { useEffect, useState } from 'react'
+import {
   StyleSheet,
-  View, 
-  SafeAreaView, 
-  Text, 
+  View,
+  SafeAreaView,
+  Text,
   TouchableOpacity
 } from 'react-native';
-import { useWallet } from './hooks';
+import { useAssetVault, useDispatch, useProfile, useTotalBalance, useWallet } from './hooks';
 import { store } from './store';
+import { fetchLuksoBalances, setupURD, transferLuksoToken } from './utils/lukso';
 
 
-const Dashboard = ({ navigation }: any) => {
+const Dashboard = ({ navigation }) => {
+  const wallet = useWallet(store)
+  const profile = useProfile(store)
+  const assetVault = useAssetVault(store)
+  const dispatch = useDispatch(store)
+  const totalBalance = useTotalBalance(store)
+
+  console.log('wallet address', wallet.address)
+
+  useEffect(() => {
+    const getBalances = async () => {
+      // await fetchLuksoBalances({ wallet, profile, assetVault }, dispatch)
+      await setupURD(wallet, assetVault.address, profile.address)
+    }
+
+
+    try {
+      getBalances()
+
+    } catch (err) {
+
+    } finally {
+
+    }
+
+
+  }, [])
+
+
   const onDeposit = () => {
     console.log('execute deposit')
   }
 
   const shortenWalletAddress = (address: string) => {
-    const firstFour = address.slice(0,6)
+    const firstFour = address.slice(0, 6)
     const lastFour = address.slice(-5)
     const shortenedAddress = `${firstFour}...${lastFour}`
     return shortenedAddress
@@ -45,7 +74,7 @@ const Dashboard = ({ navigation }: any) => {
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => navigation.navigate('SelectToken')}
-          style={{...styles.buttonStyle, marginLeft: 15}}
+          style={{ ...styles.buttonStyle, marginLeft: 15 }}
         >
           <Text style={styles.buttonText}>Send</Text>
         </TouchableOpacity>
