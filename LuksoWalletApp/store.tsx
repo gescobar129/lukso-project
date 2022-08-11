@@ -1,3 +1,4 @@
+import AsyncStorage from '@react-native-community/async-storage';
 import React, { useReducer, useState } from 'react';
 import { createContext } from 'use-context-selector';
 
@@ -36,10 +37,11 @@ type Action =
 	| { type: 'set_totalBalance'; balance: string }
 	| { type: 'set_transactions'; transactions: Transaction[] }
 	| { type: 'set_wallet'; wallet: Wallet }
+	| { type: 'set_appstate'; appstate: AppState }
 
 export type Dispatch = (action: Action) => void;
 
-const initialState: AppState = {
+export const initialState: AppState = {
 	totalBalance: '0',
 	transactions: [],
 	wallet: undefined,
@@ -55,7 +57,6 @@ const { Provider } = store;
 const StateProvider = ({ children }) => {
 
 	const [state, dispatch] = useReducer((state: AppState, action: Action) => {
-		console.log('action', action)
 		switch (action.type) {
 			case 'set_wallet': return { ...state, wallet: action.wallet }
 			case 'set_totalBalance': return { ...state, totalBalance: action.balance }
@@ -63,6 +64,7 @@ const StateProvider = ({ children }) => {
 			case 'set_profile': return { ...state, profile: action.profile }
 			case 'set_nftVault': return { ...state, nftVault: action.nftVault }
 			case 'set_assetVault': return { ...state, assetVault: action.assetVault }
+			case 'set_appstate': return { ...state, ...action.appstate }
 			default: return state
 		}
 	}, initialState)

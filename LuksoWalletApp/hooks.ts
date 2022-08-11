@@ -16,4 +16,6 @@ export const useNftVault = (state: Context<AppState>) => useContextSelector(stat
 
 export const useAssetVault = (state: Context<AppState>) => useContextSelector(state, (state: [AppState, Dispatch]) => state[0].assetVault)
 
+export const useAppState = (state: Context<[AppState, Dispatch]>) => useContextSelector(state, (state: [AppState, Dispatch]) => state[0])
+
 export const useDispatch = (state: Context<AppState>) => useContextSelector(state, (state: [AppState, Dispatch]) => state[1])
