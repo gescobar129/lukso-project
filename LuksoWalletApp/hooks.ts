@@ -6,6 +6,10 @@ import { Context } from "react";
 
 export const useWallet = (state: Context<[AppState, Dispatch]>) => useContextSelector(state, (state: [AppState, Dispatch]) => state[0].wallet)
 
+export const useTotalBalance = (state: Context<[AppState, Dispatch]>) => useContextSelector(state, (state: [AppState, Dispatch]) => state[0].totalBalance)
+
+export const useAppInitialized = (state: Context<[AppState, Dispatch]>) => useContextSelector(state, (state: [AppState, Dispatch]) => state[0].appInitialized)
+
 export const useBalance = (state: Context<AppState>) => useContextSelector(state, (state: [AppState, Dispatch]) => state[0].totalBalance)
 
 export const useTransactions = (state: Context<AppState>) => useContextSelector(state, (state: [AppState, Dispatch]) => state[0].transactions)

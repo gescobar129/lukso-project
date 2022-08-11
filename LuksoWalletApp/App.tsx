@@ -8,7 +8,7 @@ import * as encoding from 'text-encoding';
 import { AppRegistry, TouchableOpacity } from 'react-native';
 // import App from './App';
 import { name as appName } from './app.json';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -24,7 +24,7 @@ import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIc
 import AsyncStorage from '@react-native-community/async-storage';
 
 import { initialState, store } from './store';
-import { useAppState, useAssetVault, useBalance, useDispatch, useNftVault, useProfile, useTransactions, useWallet } from './hooks';
+import { useAppInitialized, useAppState, useAssetVault, useBalance, useDispatch, useNftVault, useProfile, useTransactions, useWallet } from './hooks';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -37,13 +37,19 @@ export default function App() {
   const nftVault = useNftVault(store)
   const assetVault = useAssetVault(store)
 
+
+
   useEffect(() => {
     AsyncStorage.getItem('APP_STATE').then((appstate) => {
       if (appstate) {
-        console.log('APp state', appstate)
         dispatch({
           type: 'set_appstate',
-          appstate: JSON.parse(appstate)
+          appstate: { ...JSON.parse(appstate), appInitialized: true }
+        })
+      } else {
+        dispatch({
+          type: 'set_appinitialized',
+          appInitialized: true
         })
       }
     })
@@ -51,10 +57,10 @@ export default function App() {
 
   useEffect(() => {
     if (JSON.stringify(appstate) !== JSON.stringify(initialState)) {
-      AsyncStorage.setItem('APP_STATE', JSON.stringify(appstate))
-      console.log('storage set@!')
+      AsyncStorage.setItem('APP_STATE', JSON.stringify({ ...appstate }))
     }
   }, [appstate])
+
 
   function HomeTabs() {
     return (
