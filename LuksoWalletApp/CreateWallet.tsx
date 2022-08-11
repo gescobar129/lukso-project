@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useAppInitialized, useAssetVault, useDispatch, useNftVault, useProfile, useWallet } from './hooks';
+
 import { getMnemonic, recoverWalletWithMnemonicKey } from './utils/wallet';
 
 import { store } from './store'
@@ -22,8 +23,6 @@ const CreateWallet = ({ navigation }: any) => {
   const dispatch = useDispatch(store)
   const wallet = useWallet(store)
   const appInitialized = useAppInitialized(store)
-
-
 
   useEffect(() => {
     try {
@@ -60,10 +59,6 @@ const CreateWallet = ({ navigation }: any) => {
   }
 
   const onSavedRecoveryPhrase = async () => {
-    // Deploy Contracts here
-
-    // TODO: @gaida add loading indicator to the view while
-    // contracts are deployed
     setLoading(true)
 
     if (!wallet) return console.log('No wallet found!') // Do something? show alert?
@@ -76,14 +71,14 @@ const CreateWallet = ({ navigation }: any) => {
       console.log('profile address', profileAddress)
       const txs = await deployVaults(dispatch, profileAddress)
 
-      if (txs && txs.length) {
-        console.log('deploying URDS....')
-        await Promise.all([setupURD(wallet.address, txs[0], profileAddress), setupURD(wallet.address, txs[1], profileAddress)])
-      }
+
+      // if (txs && txs.length) {
+      //   console.log('deploying URDS....')
+      //   await Promise.all([setupURD(wallet.address, txs[0], profileAddress), setupURD(wallet.address, txs[1], profileAddress)])
+      // }
       if (wallet && profileAddress && txs) {
         navigation.navigate('Dashboard')
       }
-
     } catch (err) {
       console.log('Error while deploying contracts', err)
     } finally {
@@ -94,7 +89,7 @@ const CreateWallet = ({ navigation }: any) => {
   const renderItem = ({ item, index }: any) => {
     return (
       <View style={styles.itemContainer}>
-        <Text style={styles.indexText}>{`${index + 1}. `}</Text><Text style={styles.itemText}>{item}</Text>
+        <Text style={styles.indexText}>{`${index + 1}.   `}</Text><Text style={styles.itemText}>{item}</Text>
       </View>
     )
   }
@@ -162,36 +157,38 @@ const styles = StyleSheet.create({
     fontWeight: "bold"
   },
   subText: {
-    color: "#FFFFFF",
     fontSize: 16,
-    marginBottom: 18,
     textAlign: "center",
     color: "grey",
     letterSpacing: .5
   },
   listContainer: {
-    display: "flex",
-    // alignItems: "center",
-    maxHeight: 300, alignSelf: "stretch",
-    // marginTop: 50,
+    maxHeight: 320,
+    alignSelf: "stretch",
     marginHorizontal: 18,
-    // flex:1,
-    borderWidth: .5, borderColor: "grey",
-    borderRadius: 10
   },
   itemContainer: {
-    margin: 10,
+    marginHorizontal: 10,
+    marginVertical: 6,
     flexDirection: "row",
-    width: 100
+    width: 160,
+    backgroundColor: "#191919",
+    paddingVertical: 10,
+    paddingLeft: 25,
+    justifyContent: "flex-start",
+    borderRadius: 10,
+    borderColor: "grey",
+    borderWidth: .2,
+    alignSelf: "stretch"
   },
   indexText: {
     color: "#FFFFFF",
-    fontSize: 20,
+    fontSize: 16,
     fontWeight: "bold"
   },
   itemText: {
     color: "#FFFFFF",
-    fontSize: 20,
+    fontSize: 16,
     fontWeight: "bold"
   },
   copyView: {
@@ -207,7 +204,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'center',
-    marginHorizontal: 15,
+    marginHorizontal: 18,
     marginBottom: 20
   },
   buttonStyle: {
