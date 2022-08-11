@@ -77,12 +77,12 @@ const CreateWallet = ({ navigation }: any) => {
       if (!profileAddress) throw Error('Universal Profile failed to deploy correctly')
 
       console.log('profile address', profileAddress)
+      
       await deployVaults(dispatch, profileAddress)
 
       if (wallet) {
         navigation.navigate('Dashboard')
       }
-
     } catch (err) {
       console.log('Error while deploying contracts')
     } finally {

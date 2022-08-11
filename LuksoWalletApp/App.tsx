@@ -30,7 +30,6 @@ const Tab = createBottomTabNavigator();
 
 export default function App() {
 
-
   function HomeTabs() {
     return (
       <Tab.Navigator
@@ -142,25 +141,44 @@ export default function App() {
           </Stack.Group>
         </Stack.Navigator>
       ) : (
-        <Stack.Navigator initialRouteName="CreateWallet">
+        <Stack.Navigator initialRouteName="ImportWallet">
           <Stack.Screen
             name="CreateWallet"
             component={CreateWallet}
-            options={{
-              title: "Secret Recovery Phrase",
-              headerStyle: {
-                backgroundColor: "#1b1c1c"
+            options={({navigation}) => {
+              return {
+                title: "Secret Recovery Phrase",
+                headerStyle: {
+                  backgroundColor: "#1b1c1c"
+                },
+                headerLeft: () => {
+                  return (
+                    <TouchableOpacity>
+                      <MaterialCommunityIcon name="keyboard-backspace" color={"#FFFFFF"} size={20} />
+                    </TouchableOpacity>
+                  )
+                },
               }
-            }} />
+            }
+          } />
           <Stack.Screen
             name="ImportWallet"
             component={ImportWallet}
-            options={{
-              headerStyle: {
-                backgroundColor: "#1b1c1c",
-              },
-            }}
-          />
+            options={({navigation}) => {
+              return {
+                headerStyle: {
+                  backgroundColor: "#1b1c1c",
+                },
+                headerLeft: () => {
+                  return (
+                    <TouchableOpacity>
+                      <MaterialCommunityIcon name="keyboard-backspace" color={"#FFFFFF"} size={20} />
+                    </TouchableOpacity>
+                  )
+                },
+              }
+            }
+          } />
         </Stack.Navigator>
       )}
     </NavigationContainer>
