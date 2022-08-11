@@ -23,12 +23,10 @@ const ImportWallet = ({navigation}: any) => {
   const dispatch = useDispatch(store);
   const wallet = useWallet(store);
 
-  console.log('wallet!!!!!', wallet)
 
   const onRecoveryPhraseSubmit = async () => {
-    // console.log('recovery phrase', recoveryPhrase)
     setLoading(true)
-    console.log('Imported secret phrase************')
+
     try {
       recoverWalletWithMnemonicKey(dispatch, recoveryPhrase)
     
@@ -49,24 +47,6 @@ const ImportWallet = ({navigation}: any) => {
       setLoading(false)
     }
   }
-
-  // useEffect(() => {
-  //   deployContracts()
-  //   // createAndDeployUniversalProfile({
-  //   //   controllerAddresses: ["0x45BaBF7c6A484b65b08d4453569351c52433d424"], // our EOA that will be controlling the UP
-  //   //   lsp3Profile: {
-  //   //     name: 'My Universal Profile',
-  //   //     description: 'My Cool Universal Profile',
-  //   //     tags: ['Public Profile'],
-  //   //     links: [
-  //   //       {
-  //   //         title: 'My Website',
-  //   //         url: 'https://my-website.com',
-  //   //       },
-  //   //     ],
-  //   //   }
-  //   // })
-  // }, [])
 
   return (
     <SafeAreaView style={styles.container}>
@@ -122,7 +102,6 @@ const styles = StyleSheet.create({
     fontWeight: "bold"
   },
   subText: {
-    color: "#FFFFFF",
     fontSize: 16,
     marginBottom: 18,
     textAlign: "center",
