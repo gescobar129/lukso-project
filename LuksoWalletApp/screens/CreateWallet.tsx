@@ -10,12 +10,12 @@ import {
   ActivityIndicator
 } from 'react-native';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { useAppInitialized, useAssetVault, useDispatch, useNftVault, useProfile, useWallet } from './hooks';
+import { useAppInitialized, useAssetVault, useDispatch, useNftVault, useProfile, useWallet } from '../hooks';
 
-import { getMnemonic, recoverWalletWithMnemonicKey } from './utils/wallet';
+import { getMnemonic, recoverWalletWithMnemonicKey } from '../utils/wallet';
 
-import { store } from './store'
-import { deployUniversalProfile, deployVaults, deployVaults2, setupURD } from './utils/lukso';
+import { store } from '../store'
+import { deployUniversalProfile, deployVaults, deployVaults2, setupURD } from '../utils/lukso';
 
 const CreateWallet = ({ navigation }: any) => {
   const [loading, setLoading] = useState(false)

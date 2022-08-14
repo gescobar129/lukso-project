@@ -12,13 +12,14 @@ import React, { useEffect, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import CreateWallet from './CreateWallet';
-import ImportWallet from './ImportWallet';
-import Dashboard from './Dashboard';
+import CreateWallet from './screens/CreateWallet';
+import ImportWallet from './screens/ImportWallet';
+import Dashboard from './screens/Dashboard';
 import Collectibles from './Collectibles';
 import RecentActivity from './RecentActivity';
-import SelectToken from './SelectToken'
-import WalletAddress from './WalletAddress'
+import SelectToken from './screens/SelectToken'
+import WalletAddress from './screens/WalletAddress'
+import AmountInput from './screens/AmountInput';
 import FAIcon from 'react-native-vector-icons/FontAwesome';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -167,12 +168,33 @@ export default function App() {
                   },
                 }
               }
+              }/>
+            <Stack.Screen 
+              name="AmountInput"
+              component={AmountInput}
+              options={({ navigation }) => {
+                return {
+                  title: 'Amount Input',
+                  headerTitleStyle: {
+                    color: "#FFFFFF"
+                  },
+                  headerLeft: () => {
+                    return (
+                      <TouchableOpacity onPress={() => navigation.goBack()}>
+                        <MaterialCommunityIcon name="keyboard-backspace" color={"#FFFFFF"} size={20} />
+                      </TouchableOpacity>
+                    )
+                  },
+                  headerStyle: {
+                    backgroundColor: "#262626",
+                  },
+                }
               }
-            />
+            }/>
           </Stack.Group>
         </Stack.Navigator>
       ) : (
-        <Stack.Navigator initialRouteName="ImportWallet">
+        <Stack.Navigator initialRouteName="CreateWallet">
           <Stack.Screen
             name="CreateWallet"
             component={CreateWallet}
