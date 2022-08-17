@@ -5,6 +5,10 @@ import Web3 from 'web3'
 import constants from "@lukso/lsp-smart-contracts/constants.js";
 import LSP9Vault from '../artifacts/contracts/LSP9Vault/LSP9Vault.sol/LSP9Vault.json';
 import LSP1UniversalReceiverDelegateVault from '@lukso/lsp-smart-contracts/artifacts/LSP1UniversalReceiverDelegateVault.json';
+import { ERC725 } from '@erc725/erc725.js';
+import UniversalProfileSchema from '@erc725/erc725.js/schemas/LSP3UniversalProfileMetadata.json';
+import LSP4schema from '@erc725/erc725.js/schemas/LSP4DigitalAsset.json';
+import LSP7Mintable from '@lukso/lsp-smart-contracts/artifacts/LSP7Mintable.json';
 
 import { Dispatch, Profile, store, Vault, Wallet } from '../store';
 import { useAssetVault, useProfile, useWallet } from '../hooks';
@@ -321,3 +325,34 @@ export const transferLuksoToken = async (amount: string, to: string, sender: Wal
 	}
 }
 
+export const fetchassets = async (address: string) => {
+	let provider = new Web3.providers.HttpProvider(luksoProvider)
+	const config = { ipfsGateway: 'https://2eff.lukso.dev/ipfs/' };
+
+	try {
+		const profile = new ERC725(
+			UniversalProfileSchema,
+			'0x2A3a50Ca603c76FD9B2AebbB3fAA627117f46b1e',
+			provider,
+			config
+		);
+
+		const result = await profile.fetchData('LSP5ReceivedAssets[]');
+		const ownedAssets = result.value;
+		console.log('owned asssets', ownedAssets)
+
+		const ownedAssetsMetadata = await ownedAssets.map(async (ownedAsset) => {
+			const digitalAsset = new ERC725(LSP4schema, ownedAsset, provider, config);
+
+			console.log(await digitalAsset.fetchData('LSP4Metadata'));
+		});
+
+		// console.log(ownedAssetsMetadata)
+	} catch (err) {
+		console.log(err)
+	}
+}
+
+export const testtokens = async () => {
+
+}
