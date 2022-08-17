@@ -1,8 +1,8 @@
 /**
  * @format
  */
-import './shim.js'
-import crypto from 'crypto'
+import './shim.js';
+import crypto from 'crypto';
 import * as encoding from 'text-encoding';
 
 import { AppRegistry } from 'react-native';
@@ -14,11 +14,11 @@ import App from './App';
 
 
 export default function Project() {
-	return (
-		<StateProvider>
-			<App />
-		</StateProvider>
-	);
+  return (
+    <StateProvider>
+      <App />
+    </StateProvider>
+  );
 };
 
 AppRegistry.registerComponent(appName, () => Project)

@@ -26,6 +26,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 
 import { initialState, store } from './store';
 import { useAppInitialized, useAppState, useAssetVault, useBalance, useDispatch, useNftVault, useProfile, useTransactions, useWallet } from './hooks';
+import LandingPage from './screens/LandingPage';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -168,8 +169,8 @@ export default function App() {
                   },
                 }
               }
-              }/>
-            <Stack.Screen 
+              } />
+            <Stack.Screen
               name="AmountInput"
               component={AmountInput}
               options={({ navigation }) => {
@@ -190,15 +191,25 @@ export default function App() {
                   },
                 }
               }
-            }/>
+              } />
           </Stack.Group>
         </Stack.Navigator>
       ) : (
-        <Stack.Navigator initialRouteName="CreateWallet">
+        <Stack.Navigator initialRouteName="LandingPage">
+          <Stack.Screen
+            name="LandingPage"
+            component={LandingPage}
+            options={{
+              title: 'Landing Page',
+              // headerStyle: {
+              //   backgroundColor: '#1b1c1c',
+              // },
+            }}
+          />
           <Stack.Screen
             name="CreateWallet"
             component={CreateWallet}
-            options={({navigation}) => {
+            options={({ navigation }) => {
               return {
                 title: "Secret Recovery Phrase",
                 headerStyle: {
@@ -213,11 +224,11 @@ export default function App() {
                 },
               }
             }
-          } />
+            } />
           <Stack.Screen
             name="ImportWallet"
             component={ImportWallet}
-            options={({navigation}) => {
+            options={({ navigation }) => {
               return {
                 headerStyle: {
                   backgroundColor: "#1b1c1c",
@@ -231,7 +242,7 @@ export default function App() {
                 },
               }
             }
-          } />
+            } />
         </Stack.Navigator>
       )}
     </NavigationContainer>
