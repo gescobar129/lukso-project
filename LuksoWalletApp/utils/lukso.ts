@@ -325,7 +325,7 @@ export const transferLuksoToken = async (amount: string, to: string, sender: Wal
 	}
 }
 
-export const fetchassets = async (address: string) => {
+export const fetchassets = async (address: string, type: 'vault' | 'universal_profile' | 'wallet') => {
 	let provider = new Web3.providers.HttpProvider(luksoProvider)
 	const config = { ipfsGateway: 'https://2eff.lukso.dev/ipfs/' };
 
