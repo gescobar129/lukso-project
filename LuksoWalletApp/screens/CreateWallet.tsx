@@ -5,46 +5,42 @@ import {
   Text,
   Alert,
   StyleSheet,
-  TouchableOpacity
+  TouchableOpacity,
+  FlatList,
+  ActivityIndicator
 } from 'react-native';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { useAssetVault, useDispatch, useNftVault, useProfile, useWallet } from './hooks';
-import { getMnemonic, recoverWalletWithMnemonicKey } from './utils/wallet';
+import { useAppInitialized, useAssetVault, useDispatch, useNftVault, useProfile, useWallet } from '../hooks';
 
-import { store } from './store'
-import { deployUniversalProfile, deployVaults } from './utils/lukso';
+import { getMnemonic, recoverWalletWithMnemonicKey } from '../utils/wallet';
 
-const CreateWallet = () => {
+import { store } from '../store'
+import { deployUniversalProfile, deployVaults, deployVaults2, setupURD } from '../utils/lukso';
+
+const CreateWallet = ({ navigation }: any) => {
   const [loading, setLoading] = useState(false)
   const [seedPhrase, setSeedPhrase] = useState('')
   const dispatch = useDispatch(store)
   const wallet = useWallet(store)
-  const profile = useProfile(store)
-  const nftVault = useNftVault(store)
-  const assetVault = useAssetVault(store)
-
-
-
-  console.log('wallet', wallet)
-  console.log('profile', profile)
-  console.log('assetVault', assetVault)
-  console.log('nftVault', nftVault)
+  const appInitialized = useAppInitialized(store)
 
   useEffect(() => {
     try {
-      setLoading(true)
-      const mnemonic = getMnemonic()
-      setSeedPhrase(mnemonic)
+      if (!wallet && appInitialized) {
+        setLoading(true)
+        const mnemonic = getMnemonic()
+        setSeedPhrase(mnemonic)
 
-      recoverWalletWithMnemonicKey(dispatch, mnemonic)
+        recoverWalletWithMnemonicKey(dispatch, mnemonic)
+        console.log('wallet created')
+      }
     } catch (error) {
       console.log('Error creating wallet', error)
     } finally {
       setLoading(false)
     }
+  }, [appInitialized])
 
-
-  }, [])
 
   const savedAlert = () => {
     Alert.alert(
@@ -63,10 +59,6 @@ const CreateWallet = () => {
   }
 
   const onSavedRecoveryPhrase = async () => {
-    // Deploy Contracts here
-
-    // TODO: @gaida add loading indicator to the view while
-    // contracts are deployed
     setLoading(true)
 
     if (!wallet) return console.log('No wallet found!') // Do something? show alert?
@@ -76,10 +68,30 @@ const CreateWallet = () => {
 
       if (!profileAddress) throw Error('Universal Profile failed to deploy correctly')
 
-      await deployVaults(dispatch, profileAddress)
+      console.log('profile address', profileAddress)
+      const txs = await deployVaults(dispatch, profileAddress)
+
+
+      // if (txs && txs.length) {
+      //   console.log('deploying URDS....')
+      //   await Promise.all([setupURD(wallet.address, txs[0], profileAddress), setupURD(wallet.address, txs[1], profileAddress)])
+      // }
+      if (wallet && profileAddress && txs) {
+        navigation.navigate('Dashboard')
+      }
     } catch (err) {
-      console.log('Error while deploying contracts')
+      console.log('Error while deploying contracts', err)
+    } finally {
+      setLoading(false)
     }
+  }
+
+  const renderItem = ({ item, index }: any) => {
+    return (
+      <View style={styles.itemContainer}>
+        <Text style={styles.indexText}>{`${index + 1}.   `}</Text><Text style={styles.itemText}>{item}</Text>
+      </View>
+    )
   }
 
   return (
@@ -92,9 +104,13 @@ const CreateWallet = () => {
         </Text>
       </View>
 
-      <View style={{ backgroundColor: 'green' }}>
-        <Text>{seedPhrase}</Text>
-      </View>
+      <FlatList
+        data={seedPhrase.split(' ')}
+        renderItem={renderItem}
+        numColumns={2}
+        style={styles.listContainer}
+        contentContainerStyle={{ justifyContent: "center", alignItems: "center" }}
+      />
 
       <TouchableOpacity style={styles.copyView}>
         <MaterialCommunityIcon name="content-copy" size={20} color="#FFFFFF" />
@@ -106,7 +122,12 @@ const CreateWallet = () => {
           onPress={savedAlert}
           style={styles.buttonStyle}
         >
-          <Text style={styles.buttonText}>Ok, I saved it somewhere</Text>
+          {loading ? (
+            <ActivityIndicator size="small" color="#FFFFFF" />
+          ) : (
+            <Text style={styles.buttonText}>Ok, I saved it somewhere</Text>
+          )
+          }
         </TouchableOpacity>
       </View>
     </SafeAreaView>
@@ -136,12 +157,39 @@ const styles = StyleSheet.create({
     fontWeight: "bold"
   },
   subText: {
-    color: "#FFFFFF",
     fontSize: 16,
-    marginBottom: 18,
     textAlign: "center",
     color: "grey",
     letterSpacing: .5
+  },
+  listContainer: {
+    maxHeight: 320,
+    alignSelf: "stretch",
+    marginHorizontal: 18,
+  },
+  itemContainer: {
+    marginHorizontal: 10,
+    marginVertical: 6,
+    flexDirection: "row",
+    width: 160,
+    backgroundColor: "#191919",
+    paddingVertical: 10,
+    paddingLeft: 25,
+    justifyContent: "flex-start",
+    borderRadius: 10,
+    borderColor: "grey",
+    borderWidth: .2,
+    alignSelf: "stretch"
+  },
+  indexText: {
+    color: "#FFFFFF",
+    fontSize: 16,
+    fontWeight: "bold"
+  },
+  itemText: {
+    color: "#FFFFFF",
+    fontSize: 16,
+    fontWeight: "bold"
   },
   copyView: {
     flexDirection: "row",
@@ -156,7 +204,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'center',
-    marginHorizontal: 15,
+    marginHorizontal: 18,
     marginBottom: 20
   },
   buttonStyle: {

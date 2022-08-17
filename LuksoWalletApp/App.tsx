@@ -1,119 +1,251 @@
 /**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
+ * @format
  */
+import './shim.js'
+import crypto from 'crypto'
+import * as encoding from 'text-encoding';
 
-import React from 'react';
+import { AppRegistry, TouchableOpacity } from 'react-native';
+// import App from './App';
+import { name as appName } from './app.json';
+import React, { useEffect, useState } from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import CreateWallet from './screens/CreateWallet';
+import ImportWallet from './screens/ImportWallet';
+import Dashboard from './screens/Dashboard';
+import Collectibles from './Collectibles';
+import RecentActivity from './RecentActivity';
+import SelectToken from './screens/SelectToken'
+import WalletAddress from './screens/WalletAddress'
+import AmountInput from './screens/AmountInput';
+import FAIcon from 'react-native-vector-icons/FontAwesome';
+import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+import AsyncStorage from '@react-native-community/async-storage';
 
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
+import { initialState, store } from './store';
+import { useAppInitialized, useAppState, useAssetVault, useBalance, useDispatch, useNftVault, useProfile, useTransactions, useWallet } from './hooks';
+import LandingPage from './screens/LandingPage';
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+const Stack = createNativeStackNavigator();
+const Tab = createBottomTabNavigator();
+
+
+export default function App() {
+  const dispatch = useDispatch(store)
+  const appstate = useAppState(store)
+  const profile = useProfile(store)
+  const nftVault = useNftVault(store)
+  const assetVault = useAssetVault(store)
 
 
 
+  useEffect(() => {
+    AsyncStorage.getItem('APP_STATE').then((appstate) => {
+      if (appstate) {
+        dispatch({
+          type: 'set_appstate',
+          appstate: { ...JSON.parse(appstate), appInitialized: true }
+        })
+      } else {
+        dispatch({
+          type: 'set_appinitialized',
+          appInitialized: true
+        })
+      }
+    })
+  }, [])
 
-const Section = ({ children, title }) => {
-  const isDarkMode = useColorScheme() === 'dark';
+  useEffect(() => {
+    if (JSON.stringify(appstate) !== JSON.stringify(initialState)) {
+      AsyncStorage.setItem('APP_STATE', JSON.stringify({ ...appstate }))
+    }
+  }, [appstate])
+
+  function HomeTabs() {
+    return (
+      <Tab.Navigator
+        initialRouteName="Dashboard"
+        screenOptions={{
+          tabBarStyle: {
+            borderTopColor: "#191919",
+            backgroundColor: "#191919"
+          },
+          tabBarShowLabel: false,
+          tabBarInactiveTintColor: "grey",
+          tabBarActiveTintColor: '#FFFFFF',
+        }}
+      >
+        <Tab.Screen
+          name="Dashboard"
+          component={Dashboard}
+          options={{
+            headerShown: false,
+            tabBarIcon: ({ color }) => (
+              <FAIcon name="dollar" color={color} size={25} />
+            ),
+          }}
+        />
+        <Tab.Screen
+          name="Collectibles"
+          component={Collectibles}
+          options={{
+            title: "Collectibles",
+            tabBarIcon: ({ color }) => (
+              <MaterialCommunityIcon name="view-grid" color={color} size={30} />
+            ),
+          }}
+        />
+        <Tab.Screen
+          name="RecentActivity"
+          component={RecentActivity}
+          options={{
+            title: "Recent Activity",
+            tabBarIcon: ({ color }) => (
+              <FAIcon name="bolt" color={color} size={25} />
+            ),
+          }}
+        />
+      </Tab.Navigator>
+    )
+  }
   return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={
-          [
-            styles.sectionTitle,
-            {
-              color: isDarkMode ? Colors.white : Colors.black,
-            },
-          ]
-        }>
-        {title}
-        < /Text>
-        < Text
-          style={[
-            styles.sectionDescription,
-            {
-              color: isDarkMode ? Colors.light : Colors.dark,
-            },
-          ]}>
-          {children}
-          < /Text>
-          < /View>
-          );
-};
 
-const App = () => {
-  const isDarkMode = useColorScheme() === 'dark';
-
-          const backgroundStyle = {
-            backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
-
-
-          // console.log('Mnemonic', await getMnemonic())
-
-          return (
-          <SafeAreaView style={backgroundStyle} >
-            <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-            < ScrollView
-              contentInsetAdjustmentBehavior="automatic"
-              style={backgroundStyle} >
-              <Header />
-              < View
-                style={{
-                  backgroundColor: isDarkMode ? Colors.black : Colors.white,
+    <NavigationContainer>
+      {profile && assetVault && nftVault ? (
+        <Stack.Navigator initialRouteName="HomeTabs">
+          <Stack.Screen
+            name="HomeTabs"
+            component={HomeTabs}
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Stack.Group
+            screenOptions={{
+              presentation: "modal"
+            }}>
+            <Stack.Screen
+              name="SelectToken"
+              component={SelectToken}
+              options={({ navigation }) => {
+                return {
+                  title: 'Select Token',
+                  headerTitleStyle: {
+                    color: "#FFFFFF"
+                  },
+                  headerLeft: () => {
+                    return (
+                      <TouchableOpacity onPress={() => navigation.goBack()}>
+                        <MaterialCommunityIcon name="window-close" color={"#FFFFFF"} size={20} />
+                      </TouchableOpacity>
+                    )
+                  },
+                  headerStyle: {
+                    backgroundColor: "#262626",
+                  },
                 }
-                }>
-                <Section title="Step One" >
-                  Edit < Text style={styles.highlight} > App.js < /Text> to change this
-                    screen and then come back to see your edits.
-                    < /Section>
-                    < Section title="See Your Changes" >
-                      <ReloadInstructions />
-                      < /Section>
-                      < Section title="Debug" >
-                        <DebugInstructions />
-                        < /Section>
-                        < Section title="Learn More" >
-                          Read the docs to discover what to do next:
-                        </Section>
-                        < LearnMoreLinks />
-                      </View>
-                      < /ScrollView>
-                      < /SafeAreaView>
-                      );
+              }}
+            />
+            <Stack.Screen
+              name="WalletAddress"
+              component={WalletAddress}
+              options={({ navigation }) => {
+                return {
+                  title: 'Send',
+                  headerTitleStyle: {
+                    color: "#FFFFFF"
+                  },
+                  headerLeft: () => {
+                    return (
+                      <TouchableOpacity onPress={() => navigation.goBack()}>
+                        <MaterialCommunityIcon name="keyboard-backspace" color={"#FFFFFF"} size={20} />
+                      </TouchableOpacity>
+                    )
+                  },
+                  headerStyle: {
+                    backgroundColor: "#262626",
+                  },
+                }
+              }
+              } />
+            <Stack.Screen
+              name="AmountInput"
+              component={AmountInput}
+              options={({ navigation }) => {
+                return {
+                  title: 'Amount Input',
+                  headerTitleStyle: {
+                    color: "#FFFFFF"
+                  },
+                  headerLeft: () => {
+                    return (
+                      <TouchableOpacity onPress={() => navigation.goBack()}>
+                        <MaterialCommunityIcon name="keyboard-backspace" color={"#FFFFFF"} size={20} />
+                      </TouchableOpacity>
+                    )
+                  },
+                  headerStyle: {
+                    backgroundColor: "#262626",
+                  },
+                }
+              }
+              } />
+          </Stack.Group>
+        </Stack.Navigator>
+      ) : (
+        <Stack.Navigator initialRouteName="LandingPage">
+          <Stack.Screen
+            name="LandingPage"
+            component={LandingPage}
+            options={{
+              title: 'Landing Page',
+              // headerStyle: {
+              //   backgroundColor: '#1b1c1c',
+              // },
+            }}
+          />
+          <Stack.Screen
+            name="CreateWallet"
+            component={CreateWallet}
+            options={({ navigation }) => {
+              return {
+                title: "Secret Recovery Phrase",
+                headerStyle: {
+                  backgroundColor: "#1b1c1c"
+                },
+                headerLeft: () => {
+                  return (
+                    <TouchableOpacity>
+                      <MaterialCommunityIcon name="keyboard-backspace" color={"#FFFFFF"} size={20} />
+                    </TouchableOpacity>
+                  )
+                },
+              }
+            }
+            } />
+          <Stack.Screen
+            name="ImportWallet"
+            component={ImportWallet}
+            options={({ navigation }) => {
+              return {
+                headerStyle: {
+                  backgroundColor: "#1b1c1c",
+                },
+                headerLeft: () => {
+                  return (
+                    <TouchableOpacity>
+                      <MaterialCommunityIcon name="keyboard-backspace" color={"#FFFFFF"} size={20} />
+                    </TouchableOpacity>
+                  )
+                },
+              }
+            }
+            } />
+        </Stack.Navigator>
+      )}
+    </NavigationContainer>
+  );
 };
 
-                      const styles = StyleSheet.create({
-                        sectionContainer: {
-                        marginTop: 32,
-                      paddingHorizontal: 24,
-  },
-                      sectionTitle: {
-                        fontSize: 24,
-                      fontWeight: '600',
-  },
-                      sectionDescription: {
-                        marginTop: 8,
-                      fontSize: 18,
-                      fontWeight: '400',
-  },
-                      highlight: {
-                        fontWeight: '700',
-  },
-});
-
-                      export default App;

@@ -1,25 +1,65 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react'
 import {
   StyleSheet,
   View,
   SafeAreaView,
   Text,
-  TouchableOpacity,
+  TouchableOpacity
 } from 'react-native';
 
-const Dashboard = () => {
+import { useAssetVault, useDispatch, useProfile, useTotalBalance, useWallet } from '../hooks';
+import { store } from '../store';
+import { fetchassets, fetchLuksoBalances, setupURD, transferLuksoToken } from '../utils/lukso';
+
+
+const Dashboard = ({ navigation }) => {
+  const wallet = useWallet(store)
+  const profile = useProfile(store)
+  const assetVault = useAssetVault(store)
+  const dispatch = useDispatch(store)
+  const totalBalance = useTotalBalance(store)
+
+  console.log('wallet address', assetVault.address)
+
+  useEffect(() => {
+    const getBalances = async () => {
+      // await fetchLuksoBalances({ wallet, profile, assetVault }, dispatch)
+      // await setupURD(wallet, assetVault.address, profile.address)
+      await fetchassets('')
+    }
+
+
+    try {
+      getBalances()
+
+    } catch (err) {
+
+    } finally {
+
+    }
+
+
+  }, [])
+
+
   const onDeposit = () => {
     console.log('execute deposit');
   };
 
-  const onSend = () => {
-    console.log('execute send');
-  };
+  const shortenWalletAddress = (address: string) => {
+    const firstFour = address.slice(0, 6)
+    const lastFour = address.slice(-5)
+    const shortenedAddress = `${firstFour}...${lastFour}`
+    return shortenedAddress
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.headerContainer}>
-        <TouchableOpacity onPress={() => console.log('wallet address copied!')}>
-          <Text style={styles.walletText}>0xfjatfa432ng5g02nFMD</Text>
+        <TouchableOpacity
+          onPress={() => console.log('wallet address copied!')}
+        >
+          <Text style={styles.walletText}>{shortenWalletAddress(useWallet(store).address)}</Text>
         </TouchableOpacity>
       </View>
 
@@ -32,8 +72,9 @@ const Dashboard = () => {
           <Text style={styles.buttonText}>Deposit</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          onPress={onSend}
-          style={{...styles.buttonStyle, marginLeft: 15}}>
+          onPress={() => navigation.navigate('SelectToken')}
+          style={{ ...styles.buttonStyle, marginLeft: 15 }}
+        >
           <Text style={styles.buttonText}>Send</Text>
         </TouchableOpacity>
       </View>
