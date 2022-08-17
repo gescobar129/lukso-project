@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import { useAssetVault, useDispatch, useProfile, useTotalBalance, useWallet } from './hooks';
 import { store } from './store';
-import { fetchLuksoBalances, setupURD, transferLuksoToken } from './utils/lukso';
+import { fetchassets, fetchLuksoBalances, setupURD, transferLuksoToken } from './utils/lukso';
 
 
 const Dashboard = ({ navigation }) => {
@@ -18,12 +18,13 @@ const Dashboard = ({ navigation }) => {
   const dispatch = useDispatch(store)
   const totalBalance = useTotalBalance(store)
 
-  console.log('wallet address', wallet.address)
+  console.log('wallet address', assetVault.address)
 
   useEffect(() => {
     const getBalances = async () => {
       // await fetchLuksoBalances({ wallet, profile, assetVault }, dispatch)
-      await setupURD(wallet, assetVault.address, profile.address)
+      // await setupURD(wallet, assetVault.address, profile.address)
+      await fetchassets('')
     }
 
 
