@@ -6,9 +6,10 @@ import {
   Text,
   TouchableOpacity
 } from 'react-native';
-import { useAssetVault, useDispatch, useProfile, useTotalBalance, useWallet } from './hooks';
-import { store } from './store';
-import { fetchassets, fetchLuksoBalances, setupURD, transferLuksoToken } from './utils/lukso';
+
+import { useAssetVault, useDispatch, useProfile, useTotalBalance, useWallet } from '../hooks';
+import { store } from '../store';
+import { fetchassets, fetchLuksoBalances, setupURD, transferLuksoToken } from '../utils/lukso';
 
 
 const Dashboard = ({ navigation }) => {

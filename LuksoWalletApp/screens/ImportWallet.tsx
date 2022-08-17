@@ -11,11 +11,11 @@ import {
 import { 
   useDispatch,
   useWallet
-} from './hooks';
-import { recoverWalletWithMnemonicKey } from './utils/wallet';
-import { deployUniversalProfile, deployVaults } from './utils/lukso';
+} from '../hooks';
+import { recoverWalletWithMnemonicKey } from '../utils/wallet';
+import { deployUniversalProfile, deployVaults } from '../utils/lukso';
 
-import { store } from './store'
+import { store } from '../store'
 
 const ImportWallet = ({navigation}: any) => {
   const [recoveryPhrase, setRecoveryPhrase] = useState(" ")

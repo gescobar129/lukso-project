@@ -8,12 +8,17 @@ import {
   TextInput
 } from 'react-native';
 
-const Send = () => {
+const Send = ({navigation}: any) => {
   const [walletAddress, setWalletAddress] = useState<undefined | string>(undefined)
 
   const onWalletAddressSubmit = () => {
     console.log('wallet address', walletAddress)
     console.log('wallet address')
+    try {
+      navigation.navigate("AmountInput", { walletAddress: walletAddress })
+    } catch (error) {
+      console.log('error', error)
+    }
   }
 
   return (
