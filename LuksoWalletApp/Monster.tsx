@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
-import { View, ImageBackground, Dimensions, Animated } from 'react-native'
+import { View, Animated } from 'react-native'
 
-const { width, height } = Dimensions.get('window')
 
 const Image = Animated.Image
 
@@ -68,14 +67,12 @@ const Monster = () => {
 				console.log("X position", position.x)
 				console.log("xval", xval)
 
-				// @ts-ignore
+
 				if (xval > 0) {
-					console.log('haha')
 					Animated.timing(rotatex, { toValue: 1, useNativeDriver: true, duration: 0 }).start()
 				}
-				// @ts-ignore
+
 				if (xval < 0) {
-					console.log('hehe')
 					Animated.timing(rotatex, { toValue: 0, useNativeDriver: true, duration: 0 }).start()
 				}
 
