@@ -60,12 +60,8 @@ const Monster = () => {
 
 	useEffect(() => {
 		if (animationState === 'walking') {
-			console.log('WALKINGGG')
 			walkingInterval = setInterval(() => {
 				let xval = randomizeInteger(-50, 50)
-
-				console.log("X position", position.x)
-				console.log("xval", xval)
 
 
 				if (xval > 0) {
