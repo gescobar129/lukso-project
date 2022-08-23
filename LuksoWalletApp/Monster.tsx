@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { View, Animated } from 'react-native'
+import { View, Animated, Image as StaticImage, Text } from 'react-native'
 
 
 const Image = Animated.Image
@@ -93,6 +93,10 @@ const Monster = () => {
 
 
 	return (<View style={{ backgroundColor: 'white', flex: 1, alignItems: 'center', justifyContent: 'flex-end' }}>
+		<View style={{ position: 'absolute', top: 0, left: 20, alignItems: 'flex-start', justifyContent: 'center' }}>
+			<Text style={{ fontWeight: 'bold', fontSize: 20, marginBottom: -30 }}>LukMon #1209</Text>
+			<StaticImage style={{ marginLeft: -18 }} source={require('./assets/Heart.png')} />
+		</View>
 		{/* <ImageBackground
 			source={{ uri: 'https://images.squarespace-cdn.com/content/v1/551a19f8e4b0e8322a93850a/1578073533699-9K4UGL9JEKD9E9ZH3E9T/image-asset.gif?format=500w', width, height }}
 			style={{ width: '100%', height: '100%' }}
