@@ -1,4 +1,4 @@
-import { LSPFactory, ProfileDeploymentOptions } from '@lukso/lsp-factory.js'
+// import { LSPFactory, ProfileDeploymentOptions } from '@lukso/lsp-factory.js'
 import { ethers } from 'ethers'
 import LSP0Profile from '../artifacts/contracts/LSP0ERC725Account/LSP0ERC725Account.sol/LSP0ERC725Account.json'
 import Web3 from 'web3'
@@ -8,6 +8,7 @@ import LSP1UniversalReceiverDelegateVault from '@lukso/lsp-smart-contracts/artif
 import { ERC725 } from '@erc725/erc725.js';
 import UniversalProfileSchema from '@erc725/erc725.js/schemas/LSP3UniversalProfileMetadata.json';
 import LSP4schema from '@erc725/erc725.js/schemas/LSP4DigitalAsset.json';
+import LSP8IdentifiableDigitalAssetSchema from '@lukso/lsp-smart-contracts/artifacts/LSP8IdentifiableDigitalAsset.json'
 import LSP7Mintable from '@lukso/lsp-smart-contracts/artifacts/LSP7Mintable.json';
 
 import { Dispatch, Profile, store, Vault, Wallet } from '../store';
@@ -325,6 +326,29 @@ export const transferLuksoToken = async (amount: string, to: string, sender: Wal
 	}
 }
 
+export const deployMonster = async (owner: string) => {
+	console.log('Deploying monster.....');
+
+	try {
+		const lsp8 = new web3.eth.Contract(LSP8IdentifiableDigitalAssetSchema.abi)
+		lsp8.defaultAccount = masterAddress
+
+		const deployTx = await lsp8.deploy({
+			data: LSP8IdentifiableDigitalAssetSchema.bytecode,
+			arguments: ['Lukmon#42069', 'MON', owner]
+		}).send({
+			from: masterAddress,
+			gas: 4967295,
+			gasPrice: '36967295'
+		})
+
+		console.log('deployed monster!!!')
+
+	} catch (error) {
+		console.log('Something went wrong...', error)
+	}
+}
+
 export const fetchassets = async (address: string, type: 'vault' | 'universal_profile' | 'wallet') => {
 	let provider = new Web3.providers.HttpProvider(luksoProvider)
 	const config = { ipfsGateway: 'https://2eff.lukso.dev/ipfs/' };
@@ -353,6 +377,25 @@ export const fetchassets = async (address: string, type: 'vault' | 'universal_pr
 	}
 }
 
-export const testtokens = async () => {
-
-}
+// export const testtokens = async () => {
+// 	try {
+// 		const lspFactory = new LSPFactory(luksoProvider, {
+// 			deployKey: masterKey, // Private key of the account which will deploy smart contracts
+// 			chainId: 2828,
+// 		});
+// 		await lspFactory.LSP8IdentifiableDigitalAsset.deploy({
+// 			digitalAssetMetadata: {
+// 				description: "My Digital Asset",
+// 				links: [{
+// 					title: "LUKSO Docs",
+// 					url: "https://docs.lukso.tech"
+// 				}],
+// 			},
+// 			controllerAddress: masterAddress,
+// 			name: 'TESTINNNNGGGG',
+// 			symbol: 'TEST'
+// 		});
+// 	} catch (err) {
+// 		console.log('error deploying....', err)
+// 	}
+// }
