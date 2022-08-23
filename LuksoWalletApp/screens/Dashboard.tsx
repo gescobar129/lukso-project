@@ -9,7 +9,7 @@ import {
 
 import { useAssetVault, useDispatch, useProfile, useTotalBalance, useWallet } from '../hooks';
 import { store } from '../store';
-import { fetchassets, fetchLuksoBalances, setupURD, transferLuksoToken } from '../utils/lukso';
+import { deployMonster, fetchassets, fetchLuksoBalances, setupURD, testtokens, transferLuksoToken } from '../utils/lukso';
 
 
 const Dashboard = ({ navigation }) => {
@@ -25,7 +25,8 @@ const Dashboard = ({ navigation }) => {
     const getBalances = async () => {
       // await fetchLuksoBalances({ wallet, profile, assetVault }, dispatch)
       // await setupURD(wallet, assetVault.address, profile.address)
-      await fetchassets('')
+      await deployMonster(wallet?.address || '')
+      // await testtokens()
     }
 
 

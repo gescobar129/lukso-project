@@ -27,6 +27,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import { initialState, store } from './store';
 import { useAppInitialized, useAppState, useAssetVault, useBalance, useDispatch, useNftVault, useProfile, useTransactions, useWallet } from './hooks';
 import LandingPage from './screens/LandingPage';
+import Monster from './Monster';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -85,6 +86,16 @@ export default function App() {
             tabBarIcon: ({ color }) => (
               <FAIcon name="dollar" color={color} size={25} />
             ),
+          }}
+        />
+        <Tab.Screen
+          name="Monster"
+          component={Monster}
+          options={{
+            title: "Monster",
+            tabBarIcon: ({ color }) => (
+              <MaterialCommunityIcon name="bat" color={color} size={45} />
+            )
           }}
         />
         <Tab.Screen
