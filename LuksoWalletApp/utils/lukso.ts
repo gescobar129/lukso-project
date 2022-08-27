@@ -374,6 +374,8 @@ export const deployMonster = async (owner: string) => {
 
 		console.log('deployed monster!!!')
 
+		return deployTx.options.address
+
 	} catch (error) {
 		console.log('Something went wrong...', error)
 	}
