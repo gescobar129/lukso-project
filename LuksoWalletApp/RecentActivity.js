@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   StyleSheet,
   ScrollView,
@@ -9,7 +9,7 @@ import {
 import Web3 from 'web3';
 
 // Import and network setup
-import { ERC725 } from '@erc725/erc725.js';
+import {ERC725} from '@erc725/erc725.js';
 import UniversalProfileSchema from '@erc725/erc725.js/schemas/LSP3UniversalProfileMetadata.json';
 import LSP4Schema from '@erc725/erc725.js/schemas/LSP4DigitalAsset.json';
 
@@ -20,36 +20,56 @@ const IPFS_GATEWAY = 'https://2eff.lukso.dev/ipfs/';
 
 // Parameters for the ERC725 instance
 const provider = new Web3.providers.HttpProvider(RPC_ENDPOINT);
-const config = { ipfsGateway: IPFS_GATEWAY };
+const config = {ipfsGateway: IPFS_GATEWAY};
 
-// Fetch the LSP5 data of the Universal Profile to get its owned assets
-// const profile = new ERC725(
-//   UniversalProfileSchema,
-//   SAMPLE_PROFILE_ADDRESS,
-//   provider,
-//   config,
-// );
-
-// const result = await profile.fetchData('LSP5ReceivedAssets[]');
-// const ownedAssets = result.value;
-
-// const ownedAssetsMetadata = await ownedAssets.map(async ownedAsset => {
-//   // Instantiate the asset
-//   const digitalAsset = new ERC725(LSP4Schema, ownedAsset, provider, config);
-
-//   // Get the encoded data
-//   return await digitalAsset.fetchData('LSP4Metadata');
-// });
-
-// console.log(ownedAssetsMetadata);
+// https://explorer.execution.l16.lukso.network/api?module=account&action=txlist&address=0xF7f6253011Da57Cb1c226E0774eF4e50330a667D
+let txApiLink =
+  'https://explorer.execution.l16.lukso.network/api?module=account&action=txlist&address=0xF7f6253011Da57Cb1c226E0774eF4e50330a667D';
 
 const RecentActivity = () => {
+  const [fetchedTxs, setfetchedTxs] = useState([]);
+  // const [fetchedHashes, setfetchedHashes] = useState([]);
+  // console.log(fetchedTxs[0].hash, 'fetched hash from use effect');
+  let hashesArray = [];
+  let datesArray = [];
+
+  fetchedTxs.map(tx => hashesArray.push(tx.hash));
+  fetchedTxs.map(tx => datesArray.push(tx.timeStamp));
+  console.log(new Date(1660870933 * 1000), 'this is the date?');
   return (
     <ScrollView>
-      <View style={[styles.mainButtons, styles.mainCardView]}>
+      {useEffect(() => {
+        fetch(
+          'https://explorer.execution.l16.lukso.network/api?module=account&action=txlist&address=0xF7f6253011Da57Cb1c226E0774eF4e50330a667D',
+        )
+          .then(response => response.json())
+          .then(data => setfetchedTxs(data.result));
+      }, [])}
+      <View>
+        {datesArray.map(rawDate => {
+          let date = new Date(rawDate * 1000).toString();
+          console.log(date, 'is this the raw date changed to string?');
+          return (
+            <View style={[styles.mainButtons, styles.mainCardView]}>
+              <TouchableOpacity style={styles.buttonStyle}>
+                <Text style={styles.buttonText}>{date}</Text>
+              </TouchableOpacity>
+            </View>
+            // <View>
+            //   {hashesArray.map(hash => {
+            //     return (
+            //       <View style={[styles.mainButtons, styles.mainCardView]}>
+            //         <TouchableOpacity style={styles.buttonStyle}>
+            //           <Text style={styles.buttonText}>{hash}</Text>
+            //         </TouchableOpacity>
+            //       </View>
+          );
+        })}
+        {/* <View style={[styles.mainButtons, styles.mainCardView]}>
         <TouchableOpacity style={styles.buttonStyle}>
           <Text style={styles.buttonText}> </Text>
         </TouchableOpacity>
+      </View> */}
       </View>
     </ScrollView>
   );
@@ -112,7 +132,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     borderRadius: 15,
     shadowColor: '#FFFFFF',
-    shadowOffset: { width: 0, height: 0 },
+    shadowOffset: {width: 0, height: 0},
     shadowOpacity: 1,
     shadowRadius: 8,
     elevation: 8,
