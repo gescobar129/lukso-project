@@ -1,5 +1,5 @@
 // import { LSPFactory, ProfileDeploymentOptions } from '@lukso/lsp-factory.js'
-import { ethers } from 'ethers'
+import { ethers, utils } from 'ethers'
 import LSP0Profile from '../artifacts/contracts/LSP0ERC725Account/LSP0ERC725Account.sol/LSP0ERC725Account.json'
 import Web3 from 'web3'
 import constants from "@lukso/lsp-smart-contracts/constants.js";
@@ -9,10 +9,12 @@ import { ERC725 } from '@erc725/erc725.js';
 import UniversalProfileSchema from '@erc725/erc725.js/schemas/LSP3UniversalProfileMetadata.json';
 import LSP4schema from '@erc725/erc725.js/schemas/LSP4DigitalAsset.json';
 import LSP8IdentifiableDigitalAssetSchema from '@lukso/lsp-smart-contracts/artifacts/LSP8IdentifiableDigitalAsset.json'
-import LSP7Mintable from '@lukso/lsp-smart-contracts/artifacts/LSP7Mintable.json';
+import LSP8Mintable from '@lukso/lsp-smart-contracts/artifacts/LSP8Mintable.json';
 
 import { Dispatch, Profile, store, Vault, Wallet } from '../store';
 import { useAssetVault, useProfile, useWallet } from '../hooks';
+import Lukmon_abi from '../Lukmon_abi';
+import Lukmon_bytecode from '../Lukmon_bytecode';
 
 let luksoProvider = 'https://rpc.l16.lukso.network'
 let masterKey = '02d67249b78d6ce7bd135c39ba8ac747cb20514c6d838738aac92f79757089a2'
@@ -330,17 +332,45 @@ export const deployMonster = async (owner: string) => {
 	console.log('Deploying monster.....');
 
 	try {
-		const lsp8 = new web3.eth.Contract(LSP8IdentifiableDigitalAssetSchema.abi)
+		const lsp8 = new web3.eth.Contract(Lukmon_abi)
 		lsp8.defaultAccount = masterAddress
 
 		const deployTx = await lsp8.deploy({
-			data: LSP8IdentifiableDigitalAssetSchema.bytecode,
-			arguments: ['Lukmon#42069', 'MON', owner]
+			data: Lukmon_bytecode,
+			arguments: ['Lukmon#42069', 'LMON', owner, "https://i.ibb.co/F5qy06x/walking.gif"]
 		}).send({
 			from: masterAddress,
 			gas: 4967295,
 			gasPrice: '36967295'
 		})
+
+
+
+		console.log('deploytcx', deployTx.options.address)
+		console.log('OWNER', owner)
+		console.log('BYTES', web3.utils.hexToBytes(web3.utils.asciiToHex('hello')))
+		console.log('HEX', web3.utils.asciiToHex('1000'))
+		// await deployTx.methods.mint(owner, web3.utils.asciiToHex('1000'), false, web3.utils.asciiToHex(JSON.stringify({ imageUri: "some_uri", monsterType: "hatched" }))).send({
+		// 	from: masterAddress,
+		// 	gas: 4967295,
+		// 	gasPrice: '36967295'
+		// })
+
+		const data = await deployTx.methods.getMonInfo().call({
+			from: masterAddress
+		})
+
+		console.log('call data', data)
+
+		// console.log('executeTX', executeTx)
+		// const executeTxSigned = await web3.eth.accounts.signTransaction(
+		// 	{
+		// 		from: masterAddress,
+		// 		data: executeTx.encodeABI(),
+		// 		gas: '36967295',
+		// 	},
+		// 	masterKey
+		// );
 
 		console.log('deployed monster!!!')
 

@@ -5,7 +5,8 @@ import {
   SafeAreaView,
   Text,
   TouchableOpacity,
-  Modal
+  Modal,
+  Image
 } from 'react-native';
 import QRCode from 'react-native-qrcode-svg';
 
@@ -24,13 +25,14 @@ const Dashboard = ({ navigation }) => {
 
   const [modalVisible, setIsModalVisible] = useState(false)
   const [depositDest, setDepositDest] = useState<string>(wallet?.address || '')
+  const [isDeployingMon, setIsDeployingMon] = useState(false)
 
 
   useEffect(() => {
     const getBalances = async () => {
       // await fetchLuksoBalances({ wallet, profile, assetVault }, dispatch)
       // await setupURD(wallet, assetVault.address, profile.address)
-      await deployMonster(wallet?.address || '')
+      const address = await deployMonster(wallet?.address || '')
       // await testtokens()
     }
 
@@ -80,6 +82,16 @@ const Dashboard = ({ navigation }) => {
         >
           <Text style={styles.buttonText}>Send</Text>
         </TouchableOpacity>
+      </View>
+
+      <View style={styles.monsterItem}>
+        <View style={{ flex: 1 }}>
+          <Image source={require('../assets/mon-assets/eggshaking.gif')} style={{ width: 60, height: 60, borderRadius: 15 }} />
+        </View>
+        <View style={{ flex: 3 }}>
+          <Text style={styles.itemTitleText}>Minting your Lukmon...</Text>
+          <Text style={styles.itemDesc}>Please allow 15 - 20 seconds for minting to complete</Text>
+        </View>
       </View>
 
 
@@ -148,6 +160,26 @@ const styles = StyleSheet.create({
     display: 'flex',
     flex: 1,
     backgroundColor: '#1b1c1c',
+  },
+  monsterItem: {
+    marginHorizontal: 20,
+    marginVertical: 10,
+    backgroundColor: "#333333",
+    paddingHorizontal: 15,
+    paddingVertical: 20,
+    borderRadius: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 30
+  },
+  itemTitleText: {
+    color: "#FFFFFF",
+    fontSize: 16,
+    fontWeight: "bold",
+    marginBottom: 5
+  },
+  itemDesc: {
+    color: "#FFFFFF"
   },
   headerContainer: {
     display: 'flex',
