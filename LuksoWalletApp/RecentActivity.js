@@ -40,15 +40,9 @@ const RecentActivity = () => {
   fetchedTxs.map(tx => datesArray.push(tx.timeStamp));
   // console.log(new Date(1660870933 * 1000), 'this is the date');
   return (
-    <ScrollView>
-      <View>
+    <ScrollView style={styles.container}>
+      <View style={styles.container}>
         <Text style={styles.title}>{'\n'}</Text>
-        <View
-          style={{
-            borderBottomColor: '#D4D4D4',
-            borderBottomWidth: StyleSheet.hairlineWidth,
-          }}
-        />
       </View>
       {useEffect(() => {
         fetch(
@@ -57,7 +51,7 @@ const RecentActivity = () => {
           .then(response => response.json())
           .then(data => setfetchedTxs(data.result));
       }, [])}
-      <View>
+      <View style={styles.container}>
         {fetchedTxs.map(tx => {
           let readableDate = JSON.stringify(new Date(tx.timeStamp * 1000));
           return (
@@ -104,7 +98,7 @@ const styles = StyleSheet.create({
   container: {
     display: 'flex',
     flex: 1,
-    backgroundColor: '#1b1c1c',
+    backgroundColor: '#181818',
   },
   headerContainer: {
     display: 'flex',
@@ -142,9 +136,9 @@ const styles = StyleSheet.create({
     marginHorizontal: 15,
   },
   buttonStyle: {
-    backgroundColor: '#0892d0',
+    backgroundColor: '#282828',
     paddingVertical: 15,
-    borderRadius: 25,
+    borderRadius: 5,
     display: 'flex',
     flex: 1,
     justifyContent: 'space-between',
@@ -161,7 +155,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: '#FFFFFF',
     borderRadius: 15,
-    shadowColor: '#FFFFFF',
+    shadowColor: '#808080',
     shadowOffset: {width: 0, height: 0},
     shadowOpacity: 1,
     shadowRadius: 8,

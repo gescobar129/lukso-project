@@ -1,6 +1,6 @@
 export default [
   {
-    name: 'Punk1',
+    name: 'NFT 1',
     key: '0x01',
     keyType: 'Singleton',
     image: 'https://img.seadn.io/files/5f0421dd923e8e617f4281f943f0ee0b.png',
@@ -8,7 +8,7 @@ export default [
     price: ' ',
   },
   {
-    name: 'Punk2',
+    name: 'NFT 2',
     key: '0x02',
     keyType: 'Singleton',
     image:
@@ -17,7 +17,7 @@ export default [
     price: '6000 LYXE',
   },
   {
-    name: 'Punk3',
+    name: 'NFT 3',
     key: '0x03',
     keyType: 'Singleton',
     image:
@@ -26,7 +26,7 @@ export default [
     price: '6000 LYXE',
   },
   {
-    name: 'Punk4',
+    name: 'NFT 4',
     key: '0x04',
     keyType: 'Singleton',
     image:
@@ -35,7 +35,7 @@ export default [
     price: '6000 LYXE',
   },
   {
-    name: 'Punk5',
+    name: 'NFT 5',
     key: '0x05',
     keyType: 'Singleton',
     image:
@@ -44,7 +44,7 @@ export default [
     price: '6000 LYXE',
   },
   {
-    name: 'Punk6',
+    name: 'NFT 6',
     key: '0x06',
     keyType: 'Singleton',
     image:
@@ -53,7 +53,7 @@ export default [
     price: '6000 LYXE',
   },
   {
-    name: 'Punk7',
+    name: 'NFT 7',
     key: '0x07',
     keyType: 'Singleton',
     image:
@@ -62,7 +62,7 @@ export default [
     price: '6000 LYXE',
   },
   {
-    name: 'Punk8',
+    name: 'NFT 8',
     key: '0x08',
     keyType: 'Singleton',
     image:

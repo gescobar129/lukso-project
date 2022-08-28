@@ -123,26 +123,22 @@ const Collectibles = () => {
     });
   }, []);
 
-  console.log(walletsAssets, 'send me the addy im litt!!!!!!!!!!!!!!!!!!!!');
-  let walletAddresses = [];
-  walletsAssets.map(addy => walletAddresses.push(addy));
-  // console.log(walletAddresses[2], 'the address I need');
-
-  async function fetchAssetData(address) {
-    try {
-      const digitalAsset = new ERC725(LSP4Schema, address, provider, config);
-      return await digitalAsset.fetchData('LSP4Metadata');
-    } catch (error) {
-      console.log('Could not fetch asset data: ', error);
-    }
-  }
+  // console.log(walletsAssets, 'send me the addy im litt!!!!!!!!!!!!!!!!!!!!');
 
   // console.log(nftAssets);
   let filteredNft = [];
 
   useEffect(() => {
-    let thirdAsset = walletAddresses[2];
-    fetchAssetData(thirdAsset).then(assetData => {
+    async function fetchAssetData(address) {
+      try {
+        const digitalAsset = new ERC725(LSP4Schema, address, provider, config);
+        return await digitalAsset.fetchData('LSP4Metadata');
+      } catch (error) {
+        console.log('Could not fetch asset data: ', error);
+      }
+    }
+
+    fetchAssetData(walletsAssets[2]).then(assetData => {
       console.log(
         JSON.stringify(assetData, undefined, 2),
         'this is complete data from useEffect',
@@ -208,7 +204,7 @@ const Collectibles = () => {
   return (
     <View style={container}>
       <View>
-        <Text>{nftDescription}</Text>
+        <Text style={styles.itemSmallText}>{nftDescription}</Text>
       </View>
       <FlatList
         data={nftsamples}
@@ -224,17 +220,28 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: 40,
+    backgroundColor: '#181818',
   },
   itemStyle: {
     alignItems: 'center',
     justifyContent: 'center',
     flex: 1,
     margin: 1,
-    height: WIDTH / numColumns,
+    height: 400,
+    borderWidth: 0.5,
+    borderRadius: 15,
+    // height: WIDTH / numColumns,
   },
   itemText: {
     fontWeight: '800',
     fontSize: 28,
+    marginBottom: 10,
+    color: '#493d8a',
+    textAlign: 'center',
+  },
+  itemSmallText: {
+    fontWeight: '800',
+    fontSize: 12,
     marginBottom: 10,
     color: '#493d8a',
     textAlign: 'center',
