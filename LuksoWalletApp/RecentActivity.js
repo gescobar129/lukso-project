@@ -5,6 +5,8 @@ import {
   View,
   TouchableOpacity,
   Text,
+  Modal,
+  Pressable,
 } from 'react-native';
 import Web3 from 'web3';
 
@@ -28,6 +30,7 @@ let txApiLink =
 
 const RecentActivity = () => {
   const [fetchedTxs, setfetchedTxs] = useState([]);
+  const [modalVisible, setModalVisible] = useState(false);
   // const [fetchedHashes, setfetchedHashes] = useState([]);
   // console.log(fetchedTxs[0].hash, 'fetched hash from use effect');
   let hashesArray = [];
@@ -35,11 +38,11 @@ const RecentActivity = () => {
 
   fetchedTxs.map(tx => hashesArray.push(tx.hash));
   fetchedTxs.map(tx => datesArray.push(tx.timeStamp));
-  console.log(new Date(1660870933 * 1000), 'this is the date?');
+  // console.log(new Date(1660870933 * 1000), 'this is the date');
   return (
     <ScrollView>
       <View>
-        <Text style={styles.title}>{'\n'}Latest Transactions</Text>
+        <Text style={styles.title}>{'\n'}</Text>
         <View
           style={{
             borderBottomColor: '#D4D4D4',
@@ -55,23 +58,39 @@ const RecentActivity = () => {
           .then(data => setfetchedTxs(data.result));
       }, [])}
       <View>
-        {datesArray.map(rawDate => {
-          let date = new Date(rawDate * 1000).toString();
-          console.log(date, 'is this the raw date changed to string?');
+        {fetchedTxs.map(tx => {
+          let readableDate = JSON.stringify(new Date(tx.timeStamp * 1000));
           return (
-            <View style={[styles.mainButtons, styles.mainCardView]}>
-              <TouchableOpacity style={styles.buttonStyle}>
-                <Text style={styles.buttonText}>{date}</Text>
-              </TouchableOpacity>
+            <View>
+              <View style={modalstyles.centeredView}>
+                <Modal
+                  animationType="slide"
+                  transparent={true}
+                  visible={modalVisible}
+                  onRequestClose={() => {
+                    Alert.alert('Modal has been closed.');
+                    setModalVisible(!modalVisible);
+                  }}>
+                  <View style={modalstyles.centeredView}>
+                    <View style={modalstyles.modalView}>
+                      <Text style={modalstyles.modalText}>{tx.hash}</Text>
+                    </View>
+                  </View>
+                  <Pressable
+                    style={[modalstyles.button, modalstyles.buttonClose]}
+                    onPress={() => setModalVisible(!modalVisible)}>
+                    <Text style={modalstyles.textStyle}>Close</Text>
+                  </Pressable>
+                </Modal>
+              </View>
+              <View style={[styles.mainButtons, styles.mainCardView]}>
+                <TouchableOpacity
+                  style={styles.buttonStyle}
+                  onPress={() => setModalVisible(!modalVisible)}>
+                  <Text style={styles.buttonText}>{readableDate}</Text>
+                </TouchableOpacity>
+              </View>
             </View>
-            // <View>
-            //   {hashesArray.map(hash => {
-            //     return (
-            //       <View style={[styles.mainButtons, styles.mainCardView]}>
-            //         <TouchableOpacity style={styles.buttonStyle}>
-            //           <Text style={styles.buttonText}>{hash}</Text>
-            //         </TouchableOpacity>
-            //       </View>
           );
         })}
       </View>
@@ -168,3 +187,89 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
+
+const modalstyles = StyleSheet.create({
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 22,
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 35,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  button: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+  },
+  buttonOpen: {
+    backgroundColor: '#F194FF',
+  },
+  buttonClose: {
+    backgroundColor: '#2196F3',
+  },
+  textStyle: {
+    color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: 'center',
+  },
+});
+
+// old view
+/* <View>
+        {datesArray.map(rawDate => {
+          let date = new Date(rawDate * 1000).toString();
+          console.log(date, 'is this the raw date changed to string?');
+          return (
+            <View>
+              <View style={modalstyles.centeredView}>
+                <Modal
+                  animationType="slide"
+                  transparent={true}
+                  visible={modalVisible}
+                  onRequestClose={() => {
+                    Alert.alert('Modal has been closed.');
+                    setModalVisible(!modalVisible);
+                  }}>
+                  <View style={modalstyles.centeredView}>
+                    <View style={modalstyles.modalView}>
+                      <Text style={modalstyles.modalText}>
+                        Transaction Here
+                      </Text>
+                    </View>
+                  </View>
+                  <Pressable
+                    style={[modalstyles.button, modalstyles.buttonClose]}
+                    onPress={() => setModalVisible(!modalVisible)}>
+                    <Text style={modalstyles.textStyle}>Close</Text>
+                  </Pressable>
+                </Modal>
+              </View>
+              <View style={[styles.mainButtons, styles.mainCardView]}>
+                <TouchableOpacity
+                  style={styles.buttonStyle}
+                  onPress={() => setModalVisible(!modalVisible)}>
+                  <Text style={styles.buttonText}>{date}</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          );
+        })}
+      </View> */

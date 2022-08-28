@@ -96,35 +96,6 @@ async function getAssetProperties(assetJSON) {
     console.log('Could not fetch all asset properties: ', error);
   }
 }
-// Debug
-
-// fetchAssetData(SAMPLE_ASSET_ADDRESS).then(assetData => {
-//   console.log(
-//     JSON.stringify(assetData.value.LSP4Metadata.images[0][0].url, undefined, 2),
-//   );
-//   getAssetProperties(assetData);
-// });
-
-/* create a useEffect hook and call the promise from fetchData
-within a useEffect hook in this file
-
-call the function within this component so you can use the useState hook
-to save the NFT array to the local state of this component
-
-reference createWallet component, look at the useEffect hook to create
-the mnemonic we call getmnemonic and then call setSeedPhrase to save
-the phrase to the local state so it can be rendered on line 108
-
-for the collectibles fetchdata type function you will need to have
-your function return the array of NFTs (the static nftsamples array
-for now until it is done dynamically)
-then save it to the local state of collectibles and render it
-make sure to call your promise within a useEffect
-
-rather than creating array outside of the promise (doesnt work)
-create the array within the then statement and modify it there)
-then save it to the local state of the collectibles component
-*/
 
 const numColumns = 2;
 const WIDTH = Dimensions.get('window').width;
@@ -147,7 +118,7 @@ const Collectibles = () => {
   }
 
   useEffect(() => {
-    fetchOwnedAssets(SAMPLE_PROFILE_ADDRESS).then(ownedAssets => {
+    fetchOwnedAssets(SAMPLE_PROFILE_ADDRESS).then(async ownedAssets => {
       setwalletsAssets(ownedAssets);
     });
   }, []);
@@ -170,15 +141,8 @@ const Collectibles = () => {
   let filteredNft = [];
 
   useEffect(() => {
-    fetchAssetData(walletAddresses[2]).then(assetData => {
-      // console.log(
-      //   JSON.stringify(
-      //     assetData.value.LSP4Metadata.images[0][0].url,
-      //     undefined,
-      //     2,
-      //   ),
-      //   'this is from useEffect',
-      // );
+    let thirdAsset = walletAddresses[2];
+    fetchAssetData(thirdAsset).then(assetData => {
       console.log(
         JSON.stringify(assetData, undefined, 2),
         'this is complete data from useEffect',
@@ -211,10 +175,6 @@ const Collectibles = () => {
 
       console.log(nftUrls, 'set state of nft image urls');
       console.log(nftImageUrls, 'nft image urls mapped and placed into array');
-
-      // let collectionUrls = JSON.stringify(
-      //   assetData.value.LSP4Metadata.images[0][0].url,
-      // );
 
       filteredNft.push(collectionDescription, nftImageUrls);
       console.log(filteredNft, 'this is the filtered nft data');
@@ -379,5 +339,34 @@ const styles = StyleSheet.create({
 //     aspectRatio: 1,
 //   },
 // });
+// Debug
+
+// fetchAssetData(SAMPLE_ASSET_ADDRESS).then(assetData => {
+//   console.log(
+//     JSON.stringify(assetData.value.LSP4Metadata.images[0][0].url, undefined, 2),
+//   );
+//   getAssetProperties(assetData);
+// });
+
+/* create a useEffect hook and call the promise from fetchData
+within a useEffect hook in this file
+
+call the function within this component so you can use the useState hook
+to save the NFT array to the local state of this component
+
+reference createWallet component, look at the useEffect hook to create
+the mnemonic we call getmnemonic and then call setSeedPhrase to save
+the phrase to the local state so it can be rendered on line 108
+
+for the collectibles fetchdata type function you will need to have
+your function return the array of NFTs (the static nftsamples array
+for now until it is done dynamically)
+then save it to the local state of collectibles and render it
+make sure to call your promise within a useEffect
+
+rather than creating array outside of the promise (doesnt work)
+create the array within the then statement and modify it there)
+then save it to the local state of the collectibles component
+*/
 
 export default Collectibles;
