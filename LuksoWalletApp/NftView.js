@@ -1,16 +1,30 @@
 import React from 'react';
 import {View, Text, StyleSheet, Image, useWindowDimensions} from 'react-native';
+const IPFS_GATEWAY = 'https://2eff.lukso.dev/ipfs/';
 
-const NftView = ({item}) => {
+const NftView = ({nftUrls, nftDescription, item}) => {
+  console.log(
+    nftUrls,
+    nftDescription,
+    'all nft props passed to nft view component',
+  );
+
   const {width} = useWindowDimensions();
   return (
     <View>
-      <Image
+      {nftUrls.map(url => (
+        <Image
+          source={{uri: url.replace('ipfs://', IPFS_GATEWAY)}}
+          style={[styles.image, {width, resizeMode: 'contain'}]}
+        />
+      ))}
+      {/* <Image
         source={{uri: item.image}}
         style={[styles.image, {width, resizeMode: 'contain'}]}
-      />
+      /> */}
       <Text style={styles.title}>{item.name}</Text>
-      <Text style={styles.title}>{item.price}</Text>
+      {/* <Text style={styles.title}>{nftLink}</Text> */}
+      {/* <Text style={styles.title}>{item.price}</Text> */}
     </View>
   );
 };

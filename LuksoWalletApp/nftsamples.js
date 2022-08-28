@@ -5,7 +5,7 @@ export default [
     keyType: 'Singleton',
     image: 'https://img.seadn.io/files/5f0421dd923e8e617f4281f943f0ee0b.png',
     valueType: 'bytes',
-    price: '6000 LYXE',
+    price: ' ',
   },
   {
     name: 'Punk2',
