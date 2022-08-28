@@ -15,6 +15,7 @@ import {CurrentRenderContext} from '@react-navigation/native';
 // Imports
 const Web3 = require('web3');
 const {ERC725} = require('@erc725/erc725.js');
+const erc725schema = require('@erc725/erc725.js/schemas/LSP3UniversalProfileMetadata.json');
 require('isomorphic-fetch');
 const LSP4Schema = require('@erc725/erc725.js/schemas/LSP4DigitalAsset.json');
 const LSP4 = require('@lukso/lsp-smart-contracts/artifacts/LSP4DigitalAssetMetadata.json');
@@ -22,7 +23,9 @@ const LSP4 = require('@lukso/lsp-smart-contracts/artifacts/LSP4DigitalAssetMetad
 // Static variables
 const RPC_ENDPOINT = 'https://rpc.l16.lukso.network';
 const IPFS_GATEWAY = 'https://2eff.lukso.dev/ipfs/';
+// const SAMPLE_ASSET_ADDRESS = '0xbe3077b18fedeb2c3d2d2a3390d4eb102c2083f8';
 const SAMPLE_ASSET_ADDRESS = '0xB3F00730367CC952e328eb43AC2E4B18050e6665';
+const SAMPLE_PROFILE_ADDRESS = '0xF7f6253011Da57Cb1c226E0774eF4e50330a667D';
 
 // Parameters for the ERC725 instance
 const provider = new Web3.providers.HttpProvider(RPC_ENDPOINT);
@@ -34,21 +37,6 @@ let fullSizeAssetImage;
 let assetIconLinks = [];
 let fullSizeIconImage;
 let assetDescription;
-
-/*
- * Get the dataset of an asset
- *
- * @param address of the asset
- * @return string of the encoded data
- */
-async function fetchAssetData(address) {
-  try {
-    const digitalAsset = new ERC725(LSP4Schema, address, provider, config);
-    return await digitalAsset.fetchData('LSP4Metadata');
-  } catch (error) {
-    console.log('Could not fetch asset data: ', error);
-  }
-}
 
 /*
  * Read properties of an asset
@@ -145,12 +133,44 @@ const Collectibles = () => {
   const [nftAssets, setnftAssets] = useState([]);
   const [nftUrls, setnftUrls] = useState([]);
   const [nftDescription, setnftDescription] = useState([]);
+  const [walletsAssets, setwalletsAssets] = useState([]);
+
+  async function fetchOwnedAssets(address) {
+    try {
+      const profile = new ERC725(erc725schema, address, provider, config);
+      // const result = await profile.fetchData("LSP12IssuedAssets[]");
+      const result = await profile.fetchData('LSP5ReceivedAssets[]');
+      return result.value;
+    } catch (error) {
+      return console.log('This is not an ERC725 Contract: ', error);
+    }
+  }
+
+  useEffect(() => {
+    fetchOwnedAssets(SAMPLE_PROFILE_ADDRESS).then(ownedAssets => {
+      setwalletsAssets(ownedAssets);
+    });
+  }, []);
+
+  console.log(walletsAssets, 'send me the addy im litt!!!!!!!!!!!!!!!!!!!!');
+  let walletAddresses = [];
+  walletsAssets.map(addy => walletAddresses.push(addy));
+  // console.log(walletAddresses[2], 'the address I need');
+
+  async function fetchAssetData(address) {
+    try {
+      const digitalAsset = new ERC725(LSP4Schema, address, provider, config);
+      return await digitalAsset.fetchData('LSP4Metadata');
+    } catch (error) {
+      console.log('Could not fetch asset data: ', error);
+    }
+  }
 
   // console.log(nftAssets);
   let filteredNft = [];
 
   useEffect(() => {
-    fetchAssetData(SAMPLE_ASSET_ADDRESS).then(assetData => {
+    fetchAssetData(walletAddresses[2]).then(assetData => {
       // console.log(
       //   JSON.stringify(
       //     assetData.value.LSP4Metadata.images[0][0].url,

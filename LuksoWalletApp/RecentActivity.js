@@ -38,6 +38,15 @@ const RecentActivity = () => {
   console.log(new Date(1660870933 * 1000), 'this is the date?');
   return (
     <ScrollView>
+      <View>
+        <Text style={styles.title}>{'\n'}Latest Transactions</Text>
+        <View
+          style={{
+            borderBottomColor: '#D4D4D4',
+            borderBottomWidth: StyleSheet.hairlineWidth,
+          }}
+        />
+      </View>
       {useEffect(() => {
         fetch(
           'https://explorer.execution.l16.lukso.network/api?module=account&action=txlist&address=0xF7f6253011Da57Cb1c226E0774eF4e50330a667D',
@@ -65,11 +74,6 @@ const RecentActivity = () => {
             //       </View>
           );
         })}
-        {/* <View style={[styles.mainButtons, styles.mainCardView]}>
-        <TouchableOpacity style={styles.buttonStyle}>
-          <Text style={styles.buttonText}> </Text>
-        </TouchableOpacity>
-      </View> */}
       </View>
     </ScrollView>
   );
@@ -87,6 +91,13 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'center',
+  },
+  title: {
+    fontWeight: '800',
+    fontSize: 18,
+    marginBottom: 10,
+    color: '#493d8a',
+    textAlign: 'center',
   },
   walletText: {
     color: '#FFFFFF',
