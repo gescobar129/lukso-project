@@ -213,7 +213,7 @@ const modalstyles = StyleSheet.create({
     backgroundColor: '#F194FF',
   },
   buttonClose: {
-    backgroundColor: '#2196F3',
+    backgroundColor: '#000000',
   },
   textStyle: {
     color: 'white',
