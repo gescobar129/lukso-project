@@ -8,6 +8,8 @@ import {
   Modal,
   Pressable,
 } from 'react-native';
+
+import {Button, Card, Layout} from '@ui-kitten/components';
 import Web3 from 'web3';
 
 // Import and network setup
@@ -213,7 +215,7 @@ const modalstyles = StyleSheet.create({
     backgroundColor: '#F194FF',
   },
   buttonClose: {
-    backgroundColor: '#000000',
+    backgroundColor: '#493d8a',
   },
   textStyle: {
     color: 'white',

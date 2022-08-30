@@ -26,6 +26,7 @@ import {
   testtokens,
   transferLuksoToken,
 } from '../utils/lukso';
+import {Button} from '@ui-kitten/components';
 
 const Dashboard = ({navigation}) => {
   const wallet = useWallet(store);
