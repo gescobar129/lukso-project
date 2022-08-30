@@ -3,19 +3,19 @@ export default [
     id: '1',
     title: 'A friendly crypto wallet',
     description: 'built for DeFi & NFTs',
-    image: require('./assets/friendly.png'),
+    image: require('./assets/evolve_logo_1.png'),
   },
   {
     id: '2',
     title: 'Non-Custodial',
     description: 'We never have access to any of your data or funds. Ever',
-    image: require('./assets/non_custodial.png'),
+    image: require('./assets/wallet_chart.jpg'),
   },
   {
     id: '3',
     title: 'A home for your NFTs',
     description:
-      'We have taken special care to make sure your NFTs look great!',
-    image: require('./assets/nft_home.png'),
+      'Each mobile wallet receives a digital pet nft with incentives.',
+    image: require('./assets/egg_hatching.gif'),
   },
 ];

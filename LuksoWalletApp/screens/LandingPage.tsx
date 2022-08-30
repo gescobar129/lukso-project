@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, {useEffect, useState, useRef} from 'react';
 import {
   View,
   Text,
@@ -10,35 +10,35 @@ import {
   Button,
   Alert,
 } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import {NavigationContainer} from '@react-navigation/native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import slides from '../slides';
 import OnboardingItem from '../OnboardingItem';
 
-const LandingPage = ({ navigation }) => {
+const LandingPage = ({navigation}) => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const scrollX = useRef(new Animated.Value(0)).current;
 
-  const viewableItemsChanged = useRef(({ viewableItems }) => {
+  const viewableItemsChanged = useRef(({viewableItems}) => {
     setCurrentIndex(viewableItems[0].index);
   }).current;
 
-  const viewConfig = useRef({ viewAreaCoveragePercentThreshold: 50 }).current;
+  const viewConfig = useRef({viewAreaCoveragePercentThreshold: 50}).current;
 
   return (
     <View style={styles.container}>
-      <View style={{ flex: 3 }}>
+      <View style={{flex: 3}}>
         <FlatList
           data={slides}
-          renderItem={({ item }) => <OnboardingItem item={item} />}
+          renderItem={({item}) => <OnboardingItem item={item} />}
           horizontal
           showsHorizontalScrollIndicator
           pagingEnabled
           bounces={false}
           keyExtractor={item => item.id}
           onScroll={Animated.event(
-            [{ nativeEvent: { contentOffset: { x: scrollX } } }],
+            [{nativeEvent: {contentOffset: {x: scrollX}}}],
             {
               useNativeDriver: false,
             },
@@ -56,7 +56,7 @@ const LandingPage = ({ navigation }) => {
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => navigation.navigate('ImportWallet')}
-          style={{ ...styles.buttonStyle, marginLeft: 15 }}>
+          style={{...styles.buttonStyle, marginLeft: 15}}>
           <Text style={styles.buttonText}>Import a wallet</Text>
         </TouchableOpacity>
       </View>
@@ -107,7 +107,7 @@ const styles = StyleSheet.create({
     marginBottom: 100,
   },
   buttonStyle: {
-    backgroundColor: '#0892d0',
+    backgroundColor: '#493d8a',
     paddingVertical: 15,
     borderRadius: 25,
     display: 'flex',
