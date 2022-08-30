@@ -228,7 +228,9 @@ export default function App() {
                 },
                 headerLeft: () => {
                   return (
-                    <TouchableOpacity>
+                    <TouchableOpacity
+                      onPress={() => navigation.goBack()}
+                    >
                       <MaterialCommunityIcon name="keyboard-backspace" color={"#FFFFFF"} size={20} />
                     </TouchableOpacity>
                   )
@@ -246,7 +248,9 @@ export default function App() {
                 },
                 headerLeft: () => {
                   return (
-                    <TouchableOpacity>
+                    <TouchableOpacity
+                      onPress={() => navigation.goBack()}
+                    >
                       <MaterialCommunityIcon name="keyboard-backspace" color={"#FFFFFF"} size={20} />
                     </TouchableOpacity>
                   )
