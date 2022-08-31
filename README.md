@@ -4,16 +4,16 @@ Evolve Wallet
 Is a Lukso blockchain cryptocurrency wallet with a gamified NFT experience for mobile devices. The wallet allows the user to hold, send, and view LSP7 / LSP8 Tokens (the respective equivalents for ERC20 and ERC721 NFT standards on the Lukso Blockchain). Every wallet will have a virtual pet NFT that exists within the app and can grow based on the interactions the user does with the chain. On wallet creation the NFT is minted and ownership is granted to the Universal Profile. The more the user transacts with their wallet, the more exp their monster gains in turn unlocking new features. In the beginning the monster will start off as an egg, and over time it will hatch and grow!
 
 MVP Features:
-- [ ] Create an Externally Owned Account wallet and Seed Phrase
-- [ ] Create and Deploy Universal Profile Contract
-- [ ] Create and Deploy Vault Contracts to better manage assets
-- [ ] Log in with your universal profile
-- [ ] Deposit funds / supported assets manually or using a QR code. You can select either one of the vaults or the Externally Owned account as a destination
-- [ ] Send Funds (using the supported assets list)
-- [ ] Deploy and mint digital Pet NFT
-- [ ] Observe your digital pet NFT interacting with the environment
-- [ ] View your owned NFT assets on the collectibles page
-- [ ] View your recent transactions on the Recent Activity page
+- [x] Create an Externally Owned Account wallet and Seed Phrase
+- [x] Create and Deploy Universal Profile Contract
+- [x] Create and Deploy Vault Contracts to better manage assets
+- [x] Log in with your universal profile
+- [x] Deposit funds / supported assets manually or using a QR code. You can select either one of the vaults or the Externally Owned account as a destination
+- [x] Send Funds (using the supported assets list)
+- [x] Deploy and mint digital Pet NFT
+- [x] Observe your digital pet NFT interacting with the environment
+- [x] View your owned NFT assets on the collectibles page
+- [x] View your recent transactions on the Recent Activity page
 
 MVP Video
 You can also watch an overview video here https://youtu.be/FFuyGzOj-Z0
