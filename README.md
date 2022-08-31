@@ -24,7 +24,7 @@ At the moment this app is specifically designed for mobile (to be downloaded fro
 
 
 ## Improvements:
-Ideally we want the Evolve Wallet to be THE goto wallet for Lukso. Natrually this requires building upon our proof of concept. Some of the things we want to add in the near future are:
+Ideally we want the Evolve Wallet to be THE goto wallet for Lukso. Naturally this requires building upon our proof of concept. Some of the things we want to add in the near future are:
 
 - wallet connect integration, this will allow the evolve mobile app to link to any lukso dapp
 - Leveling System for the NFT. In the proof of concept the Monster NFT did not handle leveling/exp points. Ideally as you transact on Lukso the NFT will gain experience points and evolve, and grow
