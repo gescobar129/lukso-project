@@ -232,7 +232,7 @@ export default function App() {
             name="LandingPage"
             component={LandingPage}
             options={{
-              title: 'Landing Page',
+              title: '',
               // headerStyle: {
               //   backgroundColor: '#1b1c1c',
               // },

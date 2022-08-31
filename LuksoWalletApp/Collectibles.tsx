@@ -9,7 +9,7 @@ import {
   Image,
   Dimensions,
 } from 'react-native';
-import {Card, Layout, Avatar} from '@ui-kitten/components';
+import {Card, Layout, Avatar, Divider} from '@ui-kitten/components';
 
 const {ERC725} = require('@erc725/erc725.js');
 const erc725schema = require('@erc725/erc725.js/schemas/LSP3UniversalProfileMetadata.json');
@@ -164,69 +164,107 @@ const Collectibles = () => {
   console.log(nftLink1, nftLink2, nftLink3, 'all nft links');
 
   return (
-    <ScrollView style={styles.container}>
-      <View style={styles.container}>
+    <Layout style={styles.container}>
+      <Layout style={styles.layout}>
         <Card style={styles.card}>
-          <View>
-            <Avatar
-              source={{
-                uri: 'https://2eff.lukso.dev/ipfs/QmXgvYtAResMTbz6jCeADrTSWjn7N8zxz1WNTV1qXvUcpk',
-              }}
-              size="giant"
-            />
-          </View>
+          <Avatar
+            source={{
+              uri: 'https://2eff.lukso.dev/ipfs/QmXgvYtAResMTbz6jCeADrTSWjn7N8zxz1WNTV1qXvUcpk',
+            }}
+            size="giant"
+          />
           <Text style={styles.itemText}>Universal Page NFT</Text>
         </Card>
-      </View>
-      <View style={styles.container}>
         <Card style={styles.card}>
-          <View>
-            <Avatar
-              source={{
-                uri: 'https://2eff.lukso.dev/ipfs/QmXZbGQpAehiLDdi36B9xF1yKeFjDa9ZvTVmy7KuSRZ8Pu',
-              }}
-              size="giant"
-            />
-          </View>
+          <Avatar
+            source={{
+              uri: 'https://2eff.lukso.dev/ipfs/QmXZbGQpAehiLDdi36B9xF1yKeFjDa9ZvTVmy7KuSRZ8Pu',
+            }}
+            size="giant"
+          />
           <Text style={styles.itemText}>Animorph NFT</Text>
         </Card>
-      </View>
-    </ScrollView>
+        <Card style={styles.card}>
+          <Avatar
+            source={{
+              uri: 'https://2eff.lukso.dev/ipfs/QmbxgJfimkLG5WRDHnbpmkM6rdv9A55QbctWjSwhG5e5cf',
+            }}
+            size="giant"
+          />
+          <Text style={styles.itemText}>Matrix NFT</Text>
+        </Card>
+      </Layout>
+      {/* <Layout style={styles.layout} level="4">
+      </Layout>
+      <Layout style={styles.layout} level="4">
+    </Layout> */}
+      {/* <View style={styles.container}>
+        <Card>
+        <View>
+        <Avatar
+        source={{
+          uri: 'https://2eff.lukso.dev/ipfs/QmXZbGQpAehiLDdi36B9xF1yKeFjDa9ZvTVmy7KuSRZ8Pu',
+        }}
+        size="giant"
+        />
+        </View>
+        <Text style={styles.itemText}>Animorph NFT</Text>
+        </Card>
+      </View> */}
+    </Layout>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 40,
-    paddingLeft: 30,
-    backgroundColor: '#181818',
     flexDirection: 'row',
   },
-  card: {
+  layout: {
     flex: 1,
-    margin: 2,
-    backgroundColor: '#fff',
     justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#181818',
   },
   itemText: {
     fontWeight: '800',
     fontSize: 28,
     marginBottom: 10,
-    color: '#493d8a',
+    color: '#fff',
     textAlign: 'center',
   },
-  itemSmallText: {
-    fontWeight: '800',
-    fontSize: 12,
-    marginBottom: 10,
-    color: '#493d8a',
-    textAlign: 'center',
-  },
-  image: {
-    flex: 0.7,
-    justifyContent: 'center',
+  card: {
+    flex: 1,
+    margin: 2,
+    backgroundColor: '#181818',
   },
 });
+
+// const styles = StyleSheet.create({
+//   container: {
+//     flex: 1,
+//     paddingTop: 40,
+//     paddingLeft: 30,
+//     backgroundColor: '#181818',
+//     flexDirection: 'row',
+//   },
+//   card: {
+//     flex: 1,
+//     margin: 2,
+//     backgroundColor: '#fff',
+//     justifyContent: 'center',
+//   },
+//   itemSmallText: {
+//     fontWeight: '800',
+//     fontSize: 12,
+//     marginBottom: 10,
+//     color: '#493d8a',
+//     textAlign: 'center',
+//   },
+//   image: {
+//     flex: 0.7,
+//     justifyContent: 'center',
+//   },
+// });
 
 export default Collectibles;
