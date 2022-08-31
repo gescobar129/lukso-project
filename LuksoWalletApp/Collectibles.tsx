@@ -1,110 +1,38 @@
 import React, {useState, useRef, useEffect} from 'react';
 import {
   View,
-  Text,
   StyleSheet,
   FlatList,
   Animated,
   ScrollView,
+  Text,
   Image,
   Dimensions,
 } from 'react-native';
-import NftView from './NftView';
-import nftsamples from './nftsamples';
-import {CurrentRenderContext} from '@react-navigation/native';
-// Imports
-const Web3 = require('web3');
+import {Card, Layout, Avatar, Divider} from '@ui-kitten/components';
+
 const {ERC725} = require('@erc725/erc725.js');
 const erc725schema = require('@erc725/erc725.js/schemas/LSP3UniversalProfileMetadata.json');
+const Web3 = require('web3');
 require('isomorphic-fetch');
 const LSP4Schema = require('@erc725/erc725.js/schemas/LSP4DigitalAsset.json');
 const LSP4 = require('@lukso/lsp-smart-contracts/artifacts/LSP4DigitalAssetMetadata.json');
 
-// Static variables
 const RPC_ENDPOINT = 'https://rpc.l16.lukso.network';
 const IPFS_GATEWAY = 'https://2eff.lukso.dev/ipfs/';
-// const SAMPLE_ASSET_ADDRESS = '0xbe3077b18fedeb2c3d2d2a3390d4eb102c2083f8';
-const SAMPLE_ASSET_ADDRESS = '0xB3F00730367CC952e328eb43AC2E4B18050e6665';
 const SAMPLE_PROFILE_ADDRESS = '0xF7f6253011Da57Cb1c226E0774eF4e50330a667D';
 
-// Parameters for the ERC725 instance
 const provider = new Web3.providers.HttpProvider(RPC_ENDPOINT);
 const config = {ipfsGateway: IPFS_GATEWAY};
 
-// Fetchable Asset information
-let assetImageLinks = [];
-let fullSizeAssetImage;
-let assetIconLinks = [];
-let fullSizeIconImage;
-let assetDescription;
-
-/*
- * Read properties of an asset
- */
-async function getAssetProperties(assetJSON) {
-  let assetImageData = [];
-  let iconImageData = [];
-  try {
-    if (assetJSON.value.LSP4Metadata.images[0]) {
-      assetImageData = assetJSON.value.LSP4Metadata.images;
-      for (let i in assetImageData) {
-        assetImageLinks.push([
-          i,
-          assetImageData[i].url.replace('ipfs://', IPFS_GATEWAY),
-        ]);
-      }
-      console.log(
-        'Asset Image Links: ' +
-          JSON.stringify(assetImageLinks, undefined, 2) +
-          '\n',
-      );
-
-      fullSizeAssetImage = assetImageLinks[0][1];
-      console.log('Full Size Asset Image Link: ' + fullSizeAssetImage + '\n');
-    } else {
-      console.log('Asset does not have image data \n');
-    }
-
-    if (assetJSON.value.LSP4Metadata.icon[0]) {
-      iconImageData = assetJSON.value.LSP4Metadata.icon;
-      for (let i in iconImageData) {
-        assetIconLinks.push([
-          i,
-          iconImageData[i].url.replace('ipfs://', IPFS_GATEWAY),
-        ]);
-      }
-
-      console.log(
-        'Asset Icon Links: ' +
-          JSON.stringify(assetIconLinks, undefined, 2) +
-          '\n',
-      );
-
-      fullSizeIconImage = assetIconLinks[0][1];
-      console.log('Full Size Icon Image Link: ' + fullSizeIconImage + '\n');
-    } else {
-      console.log('Asset does not have icon data');
-    }
-
-    if (assetJSON.value.LSP4Metadata.description) {
-      assetDescription = assetJSON.value.LSP4Metadata.description;
-      console.log('Asset Description: ' + assetDescription + '\n');
-    } else {
-      console.log('Asset does not have description data \n');
-    }
-  } catch (error) {
-    console.log('Could not fetch all asset properties: ', error);
-  }
-}
-
-const numColumns = 2;
-const WIDTH = Dimensions.get('window').width;
-
 const Collectibles = () => {
-  const [nftAssets, setnftAssets] = useState([]);
-  const [nftUrls, setnftUrls] = useState([]);
-  const [nftDescription, setnftDescription] = useState([]);
-  const [walletsAssets, setwalletsAssets] = useState([]);
+  const [nftAddresses, setnftAddresses] = useState([]);
+  const [stringAddresses, setstringAddresses] = useState([]);
+  const [nftData, setnftData] = useState([]);
+  const [nftDescription, setnftDescription] = useState(null);
+  const [nftAddress1, setnftAddress1] = useState('');
+  const [nftAddress2, setnftAddress2] = useState('');
+  const [nftAddress3, setnftAddress3] = useState('');
 
   async function fetchOwnedAssets(address) {
     try {
@@ -118,15 +46,16 @@ const Collectibles = () => {
   }
 
   useEffect(() => {
-    fetchOwnedAssets(SAMPLE_PROFILE_ADDRESS).then(async ownedAssets => {
-      setwalletsAssets(ownedAssets);
-    });
+    fetchOwnedAssets(SAMPLE_PROFILE_ADDRESS).then(ownedAssets =>
+      setnftAddresses(ownedAssets),
+    );
   }, []);
+  // console.log(JSON.stringify(ownedAssets, undefined, 2)),
 
-  console.log(walletsAssets, 'send me the addy im litt!!!!!!!!!!!!!!!!!!!!');
-  let walletAddresses = [];
-  walletsAssets.map(addy => walletAddresses.push(addy));
-  // console.log(walletAddresses[2], 'the address I need');
+  let stringAddy = [];
+  nftAddresses.map(addy => {
+    return stringAddy.push(JSON.stringify(addy, undefined, 2));
+  });
 
   async function fetchAssetData(address) {
     try {
@@ -137,236 +66,205 @@ const Collectibles = () => {
     }
   }
 
-  // console.log(nftAssets);
-  let filteredNft = [];
-
-  useEffect(() => {
-    let thirdAsset = walletAddresses[2];
-    fetchAssetData(thirdAsset).then(assetData => {
-      console.log(
-        JSON.stringify(assetData, undefined, 2),
-        'this is complete data from useEffect',
-      );
-
-      const getCollectionDescription = () => {
-        let collectionDescription = JSON.stringify(
-          assetData.value.LSP4Metadata.description,
+  async function getAssetProperties(assetJSON) {
+    let assetImageData = [];
+    let iconImageData = [];
+    try {
+      if (assetJSON.value.LSP4Metadata.images[0]) {
+        assetImageData = assetJSON.value.LSP4Metadata.images;
+        for (let i in assetImageData) {
+          assetImageLinks.push([
+            i,
+            assetImageData[i].url.replace('ipfs://', IPFS_GATEWAY),
+          ]);
+        }
+        console.log(
+          'Asset Image Links: ' +
+            JSON.stringify(assetImageLinks, undefined, 2) +
+            '\n',
         );
-        setnftDescription(collectionDescription);
-      };
-      getCollectionDescription();
-      console.log(
-        nftDescription,
-        'this is nft description after setting state',
-      );
 
-      // console.log(
-      //   JSON.stringify(assetData.value.LSP4Metadata.images[0][0].url),
-      //   'image urls of collection in collectibles',
-      // );
+        fullSizeAssetImage = assetImageLinks[0][1];
+        console.log('Full Size Asset Image Link: ' + fullSizeAssetImage + '\n');
+      } else {
+        console.log('Asset does not have image data \n');
+      }
 
-      let nftImageUrls = [];
+      if (assetJSON.value.LSP4Metadata.icon[0]) {
+        iconImageData = assetJSON.value.LSP4Metadata.icon;
+        for (let i in iconImageData) {
+          assetIconLinks.push([
+            i,
+            iconImageData[i].url.replace('ipfs://', IPFS_GATEWAY),
+          ]);
+        }
 
-      assetData.value.LSP4Metadata.images.map(image => {
-        // console.log(image[0].url, 'images mapped out');
-        nftImageUrls.push(image[0].url);
-        setnftUrls(nftImageUrls);
-      });
+        console.log(
+          'Asset Icon Links: ' +
+            JSON.stringify(assetIconLinks, undefined, 2) +
+            '\n',
+        );
 
-      console.log(nftUrls, 'set state of nft image urls');
-      console.log(nftImageUrls, 'nft image urls mapped and placed into array');
+        fullSizeIconImage = assetIconLinks[0][1];
+        console.log('Full Size Icon Image Link: ' + fullSizeIconImage + '\n');
+      } else {
+        console.log('Asset does not have icon data');
+      }
 
-      filteredNft.push(collectionDescription, nftImageUrls);
-      console.log(filteredNft, 'this is the filtered nft data');
+      if (assetJSON.value.LSP4Metadata.description) {
+        assetDescription = assetJSON.value.LSP4Metadata.description;
+        console.log('Asset Description: ' + assetDescription + '\n');
+      } else {
+        console.log('Asset does not have description data \n');
+      }
+    } catch (error) {
+      console.log('Could not fetch all asset properties: ', error);
+    }
+  }
 
-      getAssetProperties(assetData);
-      // let nftUrl = JSON.stringify(
-      //   assetData.value.LSP4Metadata.images[0][0].url,
-      // );
-      // setnftAssets(nftUrl);
-      setnftAssets(JSON.stringify(assetData.value.LSP4Metadata));
-      console.log(nftAssets, 'updated nftAssets without url');
-    });
-  }, []);
+  let stringifiedLoop = [];
 
-  _renderItem = ({item, index}) => {
-    let {itemStyle, itemText} = styles;
-    return (
-      <View style={itemStyle}>
-        {/* <NftView item={item} key={item.key} /> */}
-        <NftView
-          item={item}
-          key={item.key}
-          nftUrls={nftUrls}
-          nftDescription={nftDescription}
-        />
-        {/* <Text style={itemText}>{}</Text> */}
-      </View>
+  for (let i = 0; i < stringAddy.length; i++) {
+    stringifiedLoop.push(
+      JSON.stringify(new ERC725(LSP4Schema, stringAddy[i], provider, config)),
     );
-  };
-  let {container, itemText} = styles;
+  }
+
+  fetchAssetData('0x03b1F882f65aF390085a4c13715214ab6116b4AE').then(
+    assetData => {
+      setnftAddress1(
+        JSON.stringify(assetData.value.LSP4Metadata.images[0][0].url),
+      );
+    },
+  );
+  fetchAssetData('0xb5fd6425C0B2824AAd2422Ebc00F2f94693fDDa7').then(
+    assetData => {
+      setnftAddress2(
+        JSON.stringify(assetData.value.LSP4Metadata.images[0][0].url),
+      );
+    },
+  );
+  fetchAssetData('0xB3F00730367CC952e328eb43AC2E4B18050e6665').then(
+    assetData => {
+      setnftAddress3(
+        JSON.stringify(assetData.value.LSP4Metadata.images[0][0].url),
+      );
+    },
+  );
+
+  // console.log(nftAddress1, nftAddress2, nftAddress3, 'all nft addresses set');
+  console.log(nftAddress1.replace('ipfs://', IPFS_GATEWAY));
+  let nftLink1 = nftAddress1.replace('ipfs://', IPFS_GATEWAY);
+  console.log(nftLink1, 'this is nft link 1');
+  console.log(nftAddress2.replace('ipfs://', IPFS_GATEWAY));
+  let nftLink2 = nftAddress2.replace('ipfs://', IPFS_GATEWAY);
+  console.log(nftLink2, 'this is nft link 2');
+  console.log(nftAddress3.replace('ipfs://', IPFS_GATEWAY));
+  let nftLink3 = nftAddress3.replace('ipfs://', IPFS_GATEWAY);
+  console.log(nftLink1, nftLink2, nftLink3, 'all nft links');
+
   return (
-    <View style={container}>
-      <View>
-        <Text>{nftDescription}</Text>
-      </View>
-      <FlatList
-        data={nftsamples}
-        renderItem={_renderItem}
-        keyExtractor={(item, index) => index.toString()}
-        numColumns={numColumns}
-      />
-    </View>
+    <Layout style={styles.container}>
+      <Layout style={styles.layout}>
+        <Card style={styles.card}>
+          <Avatar
+            source={{
+              uri: 'https://2eff.lukso.dev/ipfs/QmXgvYtAResMTbz6jCeADrTSWjn7N8zxz1WNTV1qXvUcpk',
+            }}
+            size="giant"
+          />
+          <Text style={styles.itemText}>Universal Page NFT</Text>
+        </Card>
+        <Card style={styles.card}>
+          <Avatar
+            source={{
+              uri: 'https://2eff.lukso.dev/ipfs/QmXZbGQpAehiLDdi36B9xF1yKeFjDa9ZvTVmy7KuSRZ8Pu',
+            }}
+            size="giant"
+          />
+          <Text style={styles.itemText}>Animorph NFT</Text>
+        </Card>
+        <Card style={styles.card}>
+          <Avatar
+            source={{
+              uri: 'https://2eff.lukso.dev/ipfs/QmbxgJfimkLG5WRDHnbpmkM6rdv9A55QbctWjSwhG5e5cf',
+            }}
+            size="giant"
+          />
+          <Text style={styles.itemText}>Matrix NFT</Text>
+        </Card>
+      </Layout>
+      {/* <Layout style={styles.layout} level="4">
+      </Layout>
+      <Layout style={styles.layout} level="4">
+    </Layout> */}
+      {/* <View style={styles.container}>
+        <Card>
+        <View>
+        <Avatar
+        source={{
+          uri: 'https://2eff.lukso.dev/ipfs/QmXZbGQpAehiLDdi36B9xF1yKeFjDa9ZvTVmy7KuSRZ8Pu',
+        }}
+        size="giant"
+        />
+        </View>
+        <Text style={styles.itemText}>Animorph NFT</Text>
+        </Card>
+      </View> */}
+    </Layout>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 40,
+    flexDirection: 'row',
   },
-  itemStyle: {
-    alignItems: 'center',
-    justifyContent: 'center',
+  layout: {
     flex: 1,
-    margin: 1,
-    height: WIDTH / numColumns,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#181818',
   },
   itemText: {
     fontWeight: '800',
     fontSize: 28,
     marginBottom: 10,
-    color: '#493d8a',
+    color: '#fff',
     textAlign: 'center',
   },
+  card: {
+    flex: 1,
+    margin: 2,
+    backgroundColor: '#181818',
+  },
 });
-// const Collectibles = ({navigation}) => {
-//   const [currentIndex, setCurrentIndex] = useState(0);
-
-//   const scrollX = useRef(new Animated.Value(0)).current;
-
-//   const viewableItemsChanged = useRef(({viewableItems}) => {
-//     setCurrentIndex(viewableItems[0].index);
-//   }).current;
-
-//   const viewConfig = useRef({viewAreaCoveragePercentThreshold: 50}).current;
-
-//   return (
-//     <View style={styles.container}>
-//       <FlatList
-//         data={nftsamples}
-//         renderItem={({item}) => <NftView item={item} key={item.key} />}
-//         horizontal
-//         showsHorizontalScrollIndicator
-//         pagingEnabled
-//         bounces={false}
-//         keyExtractor={item => item.key}
-//         onScroll={Animated.event(
-//           [{nativeEvent: {contentOffset: {x: scrollX}}}],
-//           {
-//             useNativeDriver: false,
-//           },
-//         )}
-//         scrollEventThrottle={32}
-//         onViewableItemsChanged={viewableItemsChanged}
-//         viewabilityConfig={viewConfig}
-//       />
-//     </View>
-//   );
-// };
 
 // const styles = StyleSheet.create({
 //   container: {
-//     display: 'flex',
 //     flex: 1,
-//     justifyContent: 'flex-start',
-//     backgroundColor: '#ffffff',
-//   },
-//   textContainer: {
-//     display: 'flex',
-//     alignItems: 'center',
-//     marginTop: 50,
-//     marginHorizontal: 18,
-//   },
-//   mainText: {
-//     color: '#FFFFFF',
-//     fontSize: 28,
-//     marginBottom: 18,
-//     fontWeight: 'bold',
-//   },
-//   subText: {
-//     color: '#FFFFFF',
-//     fontSize: 16,
-//     marginBottom: 18,
-//     textAlign: 'center',
-//     color: 'grey',
-//     letterSpacing: 0.5,
-//   },
-//   input: {
-//     height: 100,
-//     margin: 15,
-//     padding: 12,
-//     borderRadius: 10,
-//     marginBottom: 20,
-//     color: '#FFFFFF',
-//     fontSize: 16,
-//     paddingTop: 10,
-//     lineHeight: 25,
-//     borderColor: 'grey',
-//     backgroundColor: '#191919',
-//     borderWidth: 0.5,
-//     fontWeight: '500',
-//   },
-//   mainButtonView: {
+//     paddingTop: 40,
+//     paddingLeft: 30,
+//     backgroundColor: '#181818',
 //     flexDirection: 'row',
-//     marginHorizontal: 18,
 //   },
-//   buttonStyle: {
-//     backgroundColor: '#0892d0',
-//     paddingVertical: 15,
-//     borderRadius: 25,
-//     display: 'flex',
+//   card: {
 //     flex: 1,
-//     alignItems: 'center',
+//     margin: 2,
+//     backgroundColor: '#fff',
+//     justifyContent: 'center',
 //   },
-//   buttonText: {
-//     color: '#FFFFFF',
-//     fontSize: 16,
-//     fontWeight: 'bold',
+//   itemSmallText: {
+//     fontWeight: '800',
+//     fontSize: 12,
+//     marginBottom: 10,
+//     color: '#493d8a',
+//     textAlign: 'center',
 //   },
-//   squareRatio: {
-//     width: '95%',
-//     aspectRatio: 1,
+//   image: {
+//     flex: 0.7,
+//     justifyContent: 'center',
 //   },
 // });
-// Debug
-
-// fetchAssetData(SAMPLE_ASSET_ADDRESS).then(assetData => {
-//   console.log(
-//     JSON.stringify(assetData.value.LSP4Metadata.images[0][0].url, undefined, 2),
-//   );
-//   getAssetProperties(assetData);
-// });
-
-/* create a useEffect hook and call the promise from fetchData
-within a useEffect hook in this file
-
-call the function within this component so you can use the useState hook
-to save the NFT array to the local state of this component
-
-reference createWallet component, look at the useEffect hook to create
-the mnemonic we call getmnemonic and then call setSeedPhrase to save
-the phrase to the local state so it can be rendered on line 108
-
-for the collectibles fetchdata type function you will need to have
-your function return the array of NFTs (the static nftsamples array
-for now until it is done dynamically)
-then save it to the local state of collectibles and render it
-make sure to call your promise within a useEffect
-
-rather than creating array outside of the promise (doesnt work)
-create the array within the then statement and modify it there)
-then save it to the local state of the collectibles component
-*/
 
 export default Collectibles;

@@ -8,6 +8,8 @@ import {
   Modal,
   Pressable,
 } from 'react-native';
+
+import {Button, Card, Layout} from '@ui-kitten/components';
 import Web3 from 'web3';
 
 // Import and network setup
@@ -40,15 +42,9 @@ const RecentActivity = () => {
   fetchedTxs.map(tx => datesArray.push(tx.timeStamp));
   // console.log(new Date(1660870933 * 1000), 'this is the date');
   return (
-    <ScrollView>
-      <View>
+    <ScrollView style={styles.container}>
+      <View style={styles.container}>
         <Text style={styles.title}>{'\n'}</Text>
-        <View
-          style={{
-            borderBottomColor: '#D4D4D4',
-            borderBottomWidth: StyleSheet.hairlineWidth,
-          }}
-        />
       </View>
       {useEffect(() => {
         fetch(
@@ -57,7 +53,7 @@ const RecentActivity = () => {
           .then(response => response.json())
           .then(data => setfetchedTxs(data.result));
       }, [])}
-      <View>
+      <View style={styles.container}>
         {fetchedTxs.map(tx => {
           let readableDate = JSON.stringify(new Date(tx.timeStamp * 1000));
           return (
@@ -104,7 +100,7 @@ const styles = StyleSheet.create({
   container: {
     display: 'flex',
     flex: 1,
-    backgroundColor: '#1b1c1c',
+    backgroundColor: '#181818',
   },
   headerContainer: {
     display: 'flex',
@@ -142,9 +138,9 @@ const styles = StyleSheet.create({
     marginHorizontal: 15,
   },
   buttonStyle: {
-    backgroundColor: '#0892d0',
+    backgroundColor: '#282828',
     paddingVertical: 15,
-    borderRadius: 25,
+    borderRadius: 5,
     display: 'flex',
     flex: 1,
     justifyContent: 'space-between',
@@ -161,7 +157,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: '#FFFFFF',
     borderRadius: 15,
-    shadowColor: '#FFFFFF',
+    shadowColor: '#808080',
     shadowOffset: {width: 0, height: 0},
     shadowOpacity: 1,
     shadowRadius: 8,
@@ -219,7 +215,7 @@ const modalstyles = StyleSheet.create({
     backgroundColor: '#F194FF',
   },
   buttonClose: {
-    backgroundColor: '#2196F3',
+    backgroundColor: '#493d8a',
   },
   textStyle: {
     color: 'white',
@@ -231,45 +227,3 @@ const modalstyles = StyleSheet.create({
     textAlign: 'center',
   },
 });
-
-// old view
-/* <View>
-        {datesArray.map(rawDate => {
-          let date = new Date(rawDate * 1000).toString();
-          console.log(date, 'is this the raw date changed to string?');
-          return (
-            <View>
-              <View style={modalstyles.centeredView}>
-                <Modal
-                  animationType="slide"
-                  transparent={true}
-                  visible={modalVisible}
-                  onRequestClose={() => {
-                    Alert.alert('Modal has been closed.');
-                    setModalVisible(!modalVisible);
-                  }}>
-                  <View style={modalstyles.centeredView}>
-                    <View style={modalstyles.modalView}>
-                      <Text style={modalstyles.modalText}>
-                        Transaction Here
-                      </Text>
-                    </View>
-                  </View>
-                  <Pressable
-                    style={[modalstyles.button, modalstyles.buttonClose]}
-                    onPress={() => setModalVisible(!modalVisible)}>
-                    <Text style={modalstyles.textStyle}>Close</Text>
-                  </Pressable>
-                </Modal>
-              </View>
-              <View style={[styles.mainButtons, styles.mainCardView]}>
-                <TouchableOpacity
-                  style={styles.buttonStyle}
-                  onPress={() => setModalVisible(!modalVisible)}>
-                  <Text style={styles.buttonText}>{date}</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          );
-        })}
-      </View> */

@@ -1,8 +1,8 @@
 /**
  * @format
  */
-import './shim.js'
-import crypto from 'crypto'
+import './shim.js';
+import crypto from 'crypto';
 import * as encoding from 'text-encoding';
 
 import { AppRegistry, TouchableOpacity } from 'react-native';
@@ -17,52 +17,59 @@ import ImportWallet from './screens/ImportWallet';
 import Dashboard from './screens/Dashboard';
 import Collectibles from './Collectibles';
 import RecentActivity from './RecentActivity';
-import SelectToken from './screens/SelectToken'
-import WalletAddress from './screens/WalletAddress'
+import SelectToken from './screens/SelectToken';
+import WalletAddress from './screens/WalletAddress';
 import AmountInput from './screens/AmountInput';
 import FAIcon from 'react-native-vector-icons/FontAwesome';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import AsyncStorage from '@react-native-community/async-storage';
 
 import { initialState, store } from './store';
-import { useAppInitialized, useAppState, useAssetVault, useBalance, useDispatch, useNftVault, useProfile, useTransactions, useWallet } from './hooks';
+import {
+  useAppInitialized,
+  useAppState,
+  useAssetVault,
+  useBalance,
+  useDispatch,
+  useNftVault,
+  useProfile,
+  useTransactions,
+  useWallet,
+} from './hooks';
 import LandingPage from './screens/LandingPage';
 import Monster from './Monster';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
-
 export default function App() {
-  const dispatch = useDispatch(store)
-  const appstate = useAppState(store)
-  const profile = useProfile(store)
-  const nftVault = useNftVault(store)
-  const assetVault = useAssetVault(store)
-
-
+  const dispatch = useDispatch(store);
+  const appstate = useAppState(store);
+  const profile = useProfile(store);
+  const nftVault = useNftVault(store);
+  const assetVault = useAssetVault(store);
 
   useEffect(() => {
-    AsyncStorage.getItem('APP_STATE').then((appstate) => {
+    AsyncStorage.getItem('APP_STATE').then(appstate => {
       if (appstate) {
         dispatch({
           type: 'set_appstate',
-          appstate: { ...JSON.parse(appstate), appInitialized: true }
-        })
+          appstate: { ...JSON.parse(appstate), appInitialized: true },
+        });
       } else {
         dispatch({
           type: 'set_appinitialized',
-          appInitialized: true
-        })
+          appInitialized: true,
+        });
       }
-    })
-  }, [])
+    });
+  }, []);
 
   useEffect(() => {
     if (JSON.stringify(appstate) !== JSON.stringify(initialState)) {
-      AsyncStorage.setItem('APP_STATE', JSON.stringify({ ...appstate }))
+      AsyncStorage.setItem('APP_STATE', JSON.stringify({ ...appstate }));
     }
-  }, [appstate])
+  }, [appstate]);
 
   function HomeTabs() {
     return (
@@ -70,14 +77,13 @@ export default function App() {
         initialRouteName="Dashboard"
         screenOptions={{
           tabBarStyle: {
-            borderTopColor: "#191919",
-            backgroundColor: "#191919"
+            borderTopColor: '#191919',
+            backgroundColor: '#191919',
           },
           tabBarShowLabel: false,
-          tabBarInactiveTintColor: "grey",
+          tabBarInactiveTintColor: 'grey',
           tabBarActiveTintColor: '#FFFFFF',
-        }}
-      >
+        }}>
         <Tab.Screen
           name="Dashboard"
           component={Dashboard}
@@ -92,17 +98,19 @@ export default function App() {
           name="Monster"
           component={Monster}
           options={{
-            title: "Monster",
+            title: 'Monster',
             tabBarIcon: ({ color }) => (
               <MaterialCommunityIcon name="bat" color={color} size={45} />
-            )
+            ),
           }}
         />
         <Tab.Screen
           name="Collectibles"
           component={Collectibles}
           options={{
-            title: "Collectibles",
+            title: 'Collectibles',
+            headerTintColor: '#fff',
+            headerStyle: { backgroundColor: '#181818' },
             tabBarIcon: ({ color }) => (
               <MaterialCommunityIcon name="view-grid" color={color} size={30} />
             ),
@@ -112,17 +120,18 @@ export default function App() {
           name="RecentActivity"
           component={RecentActivity}
           options={{
-            title: "Recent Activity",
+            title: 'Recent Activity',
+            headerTintColor: '#fff',
+            headerStyle: { backgroundColor: '#181818' },
             tabBarIcon: ({ color }) => (
               <FAIcon name="bolt" color={color} size={25} />
             ),
           }}
         />
       </Tab.Navigator>
-    )
+    );
   }
   return (
-
     <NavigationContainer>
       {profile && assetVault && nftVault ? (
         <Stack.Navigator initialRouteName="HomeTabs">
@@ -135,7 +144,7 @@ export default function App() {
           />
           <Stack.Group
             screenOptions={{
-              presentation: "modal"
+              presentation: 'modal',
             }}>
             <Stack.Screen
               name="SelectToken"
@@ -144,19 +153,23 @@ export default function App() {
                 return {
                   title: 'Select Token',
                   headerTitleStyle: {
-                    color: "#FFFFFF"
+                    color: '#FFFFFF',
                   },
                   headerLeft: () => {
                     return (
                       <TouchableOpacity onPress={() => navigation.goBack()}>
-                        <MaterialCommunityIcon name="window-close" color={"#FFFFFF"} size={20} />
+                        <MaterialCommunityIcon
+                          name="window-close"
+                          color={'#FFFFFF'}
+                          size={20}
+                        />
                       </TouchableOpacity>
-                    )
+                    );
                   },
                   headerStyle: {
-                    backgroundColor: "#262626",
+                    backgroundColor: '#262626',
                   },
-                }
+                };
               }}
             />
             <Stack.Screen
@@ -166,21 +179,25 @@ export default function App() {
                 return {
                   title: 'Send',
                   headerTitleStyle: {
-                    color: "#FFFFFF"
+                    color: '#FFFFFF',
                   },
                   headerLeft: () => {
                     return (
                       <TouchableOpacity onPress={() => navigation.goBack()}>
-                        <MaterialCommunityIcon name="keyboard-backspace" color={"#FFFFFF"} size={20} />
+                        <MaterialCommunityIcon
+                          name="keyboard-backspace"
+                          color={'#FFFFFF'}
+                          size={20}
+                        />
                       </TouchableOpacity>
-                    )
+                    );
                   },
                   headerStyle: {
-                    backgroundColor: "#262626",
+                    backgroundColor: '#262626',
                   },
-                }
-              }
-              } />
+                };
+              }}
+            />
             <Stack.Screen
               name="AmountInput"
               component={AmountInput}
@@ -188,21 +205,25 @@ export default function App() {
                 return {
                   title: 'Amount Input',
                   headerTitleStyle: {
-                    color: "#FFFFFF"
+                    color: '#FFFFFF',
                   },
                   headerLeft: () => {
                     return (
                       <TouchableOpacity onPress={() => navigation.goBack()}>
-                        <MaterialCommunityIcon name="keyboard-backspace" color={"#FFFFFF"} size={20} />
+                        <MaterialCommunityIcon
+                          name="keyboard-backspace"
+                          color={'#FFFFFF'}
+                          size={20}
+                        />
                       </TouchableOpacity>
-                    )
+                    );
                   },
                   headerStyle: {
-                    backgroundColor: "#262626",
+                    backgroundColor: '#262626',
                   },
-                }
-              }
-              } />
+                };
+              }}
+            />
           </Stack.Group>
         </Stack.Navigator>
       ) : (
@@ -211,7 +232,7 @@ export default function App() {
             name="LandingPage"
             component={LandingPage}
             options={{
-              title: 'Landing Page',
+              title: '',
               // headerStyle: {
               //   backgroundColor: '#1b1c1c',
               // },
@@ -222,9 +243,9 @@ export default function App() {
             component={CreateWallet}
             options={({ navigation }) => {
               return {
-                title: "Secret Recovery Phrase",
+                title: 'Secret Recovery Phrase',
                 headerStyle: {
-                  backgroundColor: "#1b1c1c"
+                  backgroundColor: '#1b1c1c',
                 },
                 headerLeft: () => {
                   return (
@@ -233,18 +254,18 @@ export default function App() {
                     >
                       <MaterialCommunityIcon name="keyboard-backspace" color={"#FFFFFF"} size={20} />
                     </TouchableOpacity>
-                  )
+                  );
                 },
-              }
-            }
-            } />
+              };
+            }}
+          />
           <Stack.Screen
             name="ImportWallet"
             component={ImportWallet}
             options={({ navigation }) => {
               return {
                 headerStyle: {
-                  backgroundColor: "#1b1c1c",
+                  backgroundColor: '#1b1c1c',
                 },
                 headerLeft: () => {
                   return (
@@ -253,14 +274,13 @@ export default function App() {
                     >
                       <MaterialCommunityIcon name="keyboard-backspace" color={"#FFFFFF"} size={20} />
                     </TouchableOpacity>
-                  )
+                  );
                 },
-              }
-            }
-            } />
+              };
+            }}
+          />
         </Stack.Navigator>
       )}
     </NavigationContainer>
   );
-};
-
+}
