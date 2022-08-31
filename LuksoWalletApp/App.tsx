@@ -5,13 +5,13 @@ import './shim.js';
 import crypto from 'crypto';
 import * as encoding from 'text-encoding';
 
-import {AppRegistry, TouchableOpacity} from 'react-native';
+import { AppRegistry, TouchableOpacity } from 'react-native';
 // import App from './App';
-import {name as appName} from './app.json';
-import React, {useEffect, useState} from 'react';
-import {NavigationContainer} from '@react-navigation/native';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import { name as appName } from './app.json';
+import React, { useEffect, useState } from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import CreateWallet from './screens/CreateWallet';
 import ImportWallet from './screens/ImportWallet';
 import Dashboard from './screens/Dashboard';
@@ -24,7 +24,7 @@ import FAIcon from 'react-native-vector-icons/FontAwesome';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import AsyncStorage from '@react-native-community/async-storage';
 
-import {initialState, store} from './store';
+import { initialState, store } from './store';
 import {
   useAppInitialized,
   useAppState,
@@ -54,7 +54,7 @@ export default function App() {
       if (appstate) {
         dispatch({
           type: 'set_appstate',
-          appstate: {...JSON.parse(appstate), appInitialized: true},
+          appstate: { ...JSON.parse(appstate), appInitialized: true },
         });
       } else {
         dispatch({
@@ -67,7 +67,7 @@ export default function App() {
 
   useEffect(() => {
     if (JSON.stringify(appstate) !== JSON.stringify(initialState)) {
-      AsyncStorage.setItem('APP_STATE', JSON.stringify({...appstate}));
+      AsyncStorage.setItem('APP_STATE', JSON.stringify({ ...appstate }));
     }
   }, [appstate]);
 
@@ -89,7 +89,7 @@ export default function App() {
           component={Dashboard}
           options={{
             headerShown: false,
-            tabBarIcon: ({color}) => (
+            tabBarIcon: ({ color }) => (
               <FAIcon name="dollar" color={color} size={25} />
             ),
           }}
@@ -99,7 +99,7 @@ export default function App() {
           component={Monster}
           options={{
             title: 'Monster',
-            tabBarIcon: ({color}) => (
+            tabBarIcon: ({ color }) => (
               <MaterialCommunityIcon name="bat" color={color} size={45} />
             ),
           }}
@@ -110,8 +110,8 @@ export default function App() {
           options={{
             title: 'Collectibles',
             headerTintColor: '#fff',
-            headerStyle: {backgroundColor: '#181818'},
-            tabBarIcon: ({color}) => (
+            headerStyle: { backgroundColor: '#181818' },
+            tabBarIcon: ({ color }) => (
               <MaterialCommunityIcon name="view-grid" color={color} size={30} />
             ),
           }}
@@ -122,8 +122,8 @@ export default function App() {
           options={{
             title: 'Recent Activity',
             headerTintColor: '#fff',
-            headerStyle: {backgroundColor: '#181818'},
-            tabBarIcon: ({color}) => (
+            headerStyle: { backgroundColor: '#181818' },
+            tabBarIcon: ({ color }) => (
               <FAIcon name="bolt" color={color} size={25} />
             ),
           }}
@@ -149,7 +149,7 @@ export default function App() {
             <Stack.Screen
               name="SelectToken"
               component={SelectToken}
-              options={({navigation}) => {
+              options={({ navigation }) => {
                 return {
                   title: 'Select Token',
                   headerTitleStyle: {
@@ -175,7 +175,7 @@ export default function App() {
             <Stack.Screen
               name="WalletAddress"
               component={WalletAddress}
-              options={({navigation}) => {
+              options={({ navigation }) => {
                 return {
                   title: 'Send',
                   headerTitleStyle: {
@@ -201,7 +201,7 @@ export default function App() {
             <Stack.Screen
               name="AmountInput"
               component={AmountInput}
-              options={({navigation}) => {
+              options={({ navigation }) => {
                 return {
                   title: 'Amount Input',
                   headerTitleStyle: {
@@ -241,7 +241,7 @@ export default function App() {
           <Stack.Screen
             name="CreateWallet"
             component={CreateWallet}
-            options={({navigation}) => {
+            options={({ navigation }) => {
               return {
                 title: 'Secret Recovery Phrase',
                 headerStyle: {
@@ -249,12 +249,10 @@ export default function App() {
                 },
                 headerLeft: () => {
                   return (
-                    <TouchableOpacity>
-                      <MaterialCommunityIcon
-                        name="keyboard-backspace"
-                        color={'#FFFFFF'}
-                        size={20}
-                      />
+                    <TouchableOpacity
+                      onPress={() => navigation.goBack()}
+                    >
+                      <MaterialCommunityIcon name="keyboard-backspace" color={"#FFFFFF"} size={20} />
                     </TouchableOpacity>
                   );
                 },
@@ -264,19 +262,17 @@ export default function App() {
           <Stack.Screen
             name="ImportWallet"
             component={ImportWallet}
-            options={({navigation}) => {
+            options={({ navigation }) => {
               return {
                 headerStyle: {
                   backgroundColor: '#1b1c1c',
                 },
                 headerLeft: () => {
                   return (
-                    <TouchableOpacity>
-                      <MaterialCommunityIcon
-                        name="keyboard-backspace"
-                        color={'#FFFFFF'}
-                        size={20}
-                      />
+                    <TouchableOpacity
+                      onPress={() => navigation.goBack()}
+                    >
+                      <MaterialCommunityIcon name="keyboard-backspace" color={"#FFFFFF"} size={20} />
                     </TouchableOpacity>
                   );
                 },
